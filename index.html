@@ -3,1265 +3,1170 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>محكمة الطاقة 3D: الطاقة والمواطنة — مروة بكاوي (2 رياضي)</title>
+  <title>محكمة الطاقة 3D — الطاقة والمواطنة</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <style>
     :root {
-      --bg: #f6f3ec;
-      --surface: #ffffff;
-      --surface-alt: #fbf9f5;
-      --ink: #171717;
-      --muted: #525252;
-      --border: #1f1f1f;
-      --border-soft: #d6d1c7;
-      --accent: #111111;
-      --accent-soft: #ece7dc;
-      --danger: #8b1e1e;
-      --danger-bg: #fdf2f2;
-      --ok: #14532d;
-      --ok-bg: #f0fdf4;
-      --shadow: 4px 4px 0px #171717;
+      --bg-a: #f0f9ff;
+      --bg-b: #ecfdf5;
+      --bg-c: #fffbeb;
+      --card: #ffffff;
+      --ink: #0f172a;
+      --muted: #475569;
+      --blue: #2563eb;
+      --cyan: #06b6d4;
+      --emerald: #10b981;
+      --amber: #f59e0b;
+      --violet: #7c3aed;
+      --rose: #f43f5e;
+      --border: #e2e8f0;
+      --shadow: 0 16px 36px rgba(15, 23, 42, 0.08);
     }
 
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     body {
-      margin: 0;
       font-family: 'Cairo', sans-serif;
-      background: var(--bg);
       color: var(--ink);
-      line-height: 1.7;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 10% 12%, rgba(37, 99, 235, 0.16), transparent 36%),
+        radial-gradient(circle at 90% 12%, rgba(16, 185, 129, 0.16), transparent 38%),
+        radial-gradient(circle at 50% 92%, rgba(245, 158, 11, 0.16), transparent 45%),
+        linear-gradient(155deg, var(--bg-a), var(--bg-b) 50%, var(--bg-c));
+      padding-bottom: 52px;
       overflow-x: hidden;
     }
 
-    #entry-gate {
-      position: fixed;
-      inset: 0;
-      z-index: 999;
-      background: var(--bg);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-
-    .entry-card {
-      max-width: 680px;
-      width: 100%;
-      background: var(--surface);
-      border: 2px solid var(--border);
-      box-shadow: 8px 8px 0px var(--border);
-      padding: 32px 26px;
-      text-align: center;
-    }
-
-    .student-badge {
-      display: inline-block;
-      background: var(--accent-soft);
-      border: 1.5px solid var(--border);
-      padding: 6px 14px;
-      font-weight: 700;
-      font-size: 0.95rem;
-      margin-bottom: 14px;
-    }
-
-    .entry-card h1 {
-      margin: 8px 0 12px;
-      font-size: clamp(1.6rem, 3.5vw, 2.3rem);
-      font-weight: 800;
-    }
-
-    .entry-card p {
-      color: var(--muted);
-      margin: 0 auto 24px;
-      max-width: 540px;
-    }
-
-    .btn-primary {
-      background: var(--accent);
-      color: #ffffff;
-      border: 2px solid var(--border);
-      padding: 13px 26px;
-      font-family: inherit;
-      font-size: 1.05rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: transform 0.12s ease, background 0.15s ease;
-    }
-
-    .btn-primary:hover {
-      background: #2b2b2b;
-      transform: translate(-1px, -1px);
-    }
-
-    .btn-secondary {
-      background: var(--surface);
-      color: var(--ink);
-      border: 1.5px solid var(--border);
-      padding: 8px 14px;
-      font-family: inherit;
-      font-size: 0.9rem;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .btn-secondary:hover {
-      background: var(--accent-soft);
-    }
-
-    .btn-secondary.active {
-      background: var(--ink);
-      color: #ffffff;
-    }
-
-    header.top-bar {
-      background: var(--surface);
-      border-bottom: 2px solid var(--border);
-      padding: 14px 20px;
+    .topbar {
       position: sticky;
       top: 0;
-      z-index: 50;
+      z-index: 30;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 20px;
     }
 
-    .top-bar-inner {
-      max-width: 1240px;
+    .topbar-inner {
+      max-width: 1180px;
       margin: 0 auto;
       display: flex;
-      flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
       gap: 12px;
     }
 
-    .brand-title {
-      font-size: 1.2rem;
-      font-weight: 800;
-      margin: 0;
+    .brand-badge {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--blue), var(--cyan), var(--emerald));
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-size: 20px;
+      font-weight: 900;
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);
     }
 
-    .citizen-meter-box {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: var(--surface-alt);
-      border: 1.5px solid var(--border);
-      padding: 6px 12px;
-      font-size: 0.9rem;
+    .brand-name {
+      font-size: 1.12rem;
+      font-weight: 900;
+      background: linear-gradient(90deg, #0f172a, #2563eb, #059669);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-sub {
+      font-size: 0.78rem;
+      color: var(--muted);
       font-weight: 700;
     }
 
-    .meter-track {
-      width: 120px;
-      height: 12px;
-      background: #e5e5e5;
-      border: 1px solid var(--border);
-      overflow: hidden;
-    }
-
-    .meter-fill {
-      height: 100%;
-      width: 0%;
-      background: var(--ink);
-      transition: width 0.35s ease;
-    }
-
-    nav.section-nav {
-      max-width: 1240px;
-      margin: 16px auto 0;
-      padding: 0 20px;
+    .nav-tabs {
       display: flex;
+      align-items: center;
       gap: 8px;
       flex-wrap: wrap;
     }
 
-    .nav-tab {
-      background: var(--surface);
-      border: 1.5px solid var(--border);
-      padding: 8px 14px;
-      font-family: inherit;
-      font-size: 0.92rem;
-      font-weight: 700;
+    .tab-btn {
+      border: none;
+      background: #f1f5f9;
+      color: #334155;
+      font-family: 'Cairo', sans-serif;
+      font-weight: 800;
+      font-size: 0.84rem;
+      padding: 7px 14px;
+      border-radius: 999px;
       cursor: pointer;
+      transition: all 0.22s ease;
     }
 
-    .nav-tab.active {
-      background: var(--ink);
-      color: #ffffff;
-      box-shadow: 3px 3px 0px var(--border-soft);
+    .tab-btn:hover {
+      transform: translateY(-2px);
+      background: #e2e8f0;
     }
 
-    main.container {
-      max-width: 1240px;
-      margin: 18px auto 48px;
-      padding: 0 20px;
+    .tab-btn.active {
+      color: #fff;
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+      box-shadow: 0 8px 18px rgba(37, 99, 235, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .tab-btn.summary-tab.active {
+      background: linear-gradient(135deg, var(--violet), var(--rose));
+      box-shadow: 0 8px 18px rgba(124, 58, 237, 0.3);
+    }
+
+    .wrap {
+      max-width: 1180px;
+      margin: 22px auto 0;
+      padding: 0 18px;
       display: grid;
-      grid-template-columns: 1.15fr 0.85fr;
       gap: 20px;
     }
 
-    @media (max-width: 960px) {
-      main.container {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .panel {
-      background: var(--surface);
-      border: 2px solid var(--border);
+    .card {
+      background: var(--card);
+      border-radius: 24px;
+      padding: 22px 24px;
+      border: 1px solid var(--border);
       box-shadow: var(--shadow);
-      padding: 20px;
-    }
-
-    .video-box {
-      background: var(--surface-alt);
-      border: 1.5px solid var(--border);
-      padding: 14px;
-      margin-bottom: 18px;
-    }
-
-    .video-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 10px;
-      font-weight: 700;
-      font-size: 0.95rem;
-    }
-
-    video#narration-video {
-      width: 100%;
-      max-height: 290px;
-      background: #111111;
-      border: 1.5px solid var(--border);
-      display: block;
-    }
-
-    .video-controls {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
-      margin-top: 10px;
-    }
-
-    .fallback-msg {
-      margin-top: 8px;
-      padding: 8px 12px;
-      background: var(--accent-soft);
-      border: 1px dashed var(--border);
-      font-size: 0.88rem;
-      color: var(--muted);
-      display: none;
-    }
-
-    .stage-toolbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 12px;
-    }
-
-    .mode-toggle {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    #canvas-wrapper {
-      width: 100%;
-      height: 360px;
-      border: 1.5px solid var(--border);
-      background: #f2efe9;
-      position: relative;
-      cursor: grab;
-      touch-action: none;
-    }
-
-    #canvas-wrapper:active {
-      cursor: grabbing;
-    }
-
-    .stage-caption {
-      margin-top: 10px;
-      font-size: 0.9rem;
-      color: var(--muted);
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .info-block {
-      border: 1.5px solid var(--border);
-      background: var(--surface-alt);
-      padding: 14px;
-      margin-bottom: 14px;
-    }
-
-    .info-block h3 {
-      margin: 0 0 6px;
-      font-size: 1.05rem;
-      font-weight: 800;
-    }
-
-    .formula-pill {
-      display: inline-block;
-      background: var(--surface);
-      border: 1.5px solid var(--border);
-      padding: 4px 10px;
-      font-weight: 700;
-      margin-top: 6px;
-      direction: ltr;
-    }
-
-    .metrics-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-      margin-bottom: 14px;
-    }
-
-    .metric-card {
-      border: 1.5px solid var(--border);
-      padding: 10px 12px;
-      background: var(--surface);
-    }
-
-    .metric-label {
-      font-size: 0.85rem;
-      color: var(--muted);
-    }
-
-    .metric-value {
-      font-size: 1.15rem;
-      font-weight: 800;
-    }
-
-    .verdict-box {
-      border: 1.5px solid var(--border);
-      padding: 14px;
-      background: var(--surface);
-    }
-
-    .verdict-options {
-      display: grid;
-      gap: 8px;
-      margin-top: 10px;
-    }
-
-    .verdict-btn {
-      text-align: right;
-      background: var(--surface-alt);
-      border: 1.5px solid var(--border);
-      padding: 10px 12px;
-      font-family: inherit;
-      font-size: 0.92rem;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .verdict-btn:hover {
-      background: var(--accent-soft);
-    }
-
-    .verdict-feedback {
-      margin-top: 10px;
-      padding: 10px;
-      border: 1.5px solid var(--border);
-      font-weight: 700;
-      font-size: 0.92rem;
-      display: none;
-    }
-
-    #summary-section {
-      grid-column: 1 / -1;
-      display: none;
-    }
-
-    #summary-section.visible {
-      display: block;
-    }
-
-    .comparison-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
       gap: 16px;
-      margin-bottom: 18px;
+      animation: fadeUp 0.4s ease;
     }
 
-    @media (max-width: 760px) {
-      .comparison-grid {
-        grid-template-columns: 1fr;
-      }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    .comp-card {
-      border: 1.5px solid var(--border);
-      padding: 16px;
-      background: var(--surface-alt);
+    .meta-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
     }
 
-    .comp-card ul {
-      margin: 8px 0 0;
-      padding-right: 18px;
-    }
-
-    .tips-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-      margin-bottom: 22px;
-    }
-
-    @media (max-width: 820px) {
-      .tips-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .tip-card {
-      border: 1.5px solid var(--border);
-      padding: 14px;
-      background: var(--surface);
-    }
-
-    .certificate-box {
-      border: 2.5px solid var(--border);
-      background: #fcfaf5;
-      padding: 24px;
-      text-align: center;
-      box-shadow: 6px 6px 0px var(--border);
-    }
-
-    .cert-input-row {
-      margin: 14px auto;
-      max-width: 420px;
-    }
-
-    .cert-input-row input {
-      width: 100%;
-      padding: 10px 12px;
-      border: 1.5px solid var(--border);
-      font-family: inherit;
-      font-size: 1rem;
-      font-weight: 700;
-      text-align: center;
-      background: #ffffff;
-    }
-
-    .cert-preview {
-      margin-top: 14px;
-      padding: 18px;
-      border: 1.5px dashed var(--border);
-      background: #ffffff;
-    }
-
-    .cert-author {
-      margin-top: 12px;
+    .pill-tag {
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.82rem;
       font-weight: 800;
-      font-size: 1rem;
+      background: linear-gradient(90deg, rgba(37, 99, 235, 0.12), rgba(16, 185, 129, 0.14));
+      color: #1e3a8a;
+    }
+
+    .sub-tag {
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      background: #f1f5f9;
+      color: #334155;
+    }
+
+    .claim-box {
+      background: linear-gradient(135deg, #eff6ff, #f0fdf4);
+      border-right: 5px solid var(--blue);
+      border-radius: 16px;
+      padding: 16px 18px;
+      font-size: 1.06rem;
+      font-weight: 800;
+      line-height: 1.75;
+    }
+
+    /* مشغل الصوت فقط (بدون فيديو إطلاقاً) */
+    .audio-box {
+      background: linear-gradient(125deg, #0f172a, #1e293b, #1d4ed8);
+      color: #fff;
+      border-radius: 20px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      box-shadow: 0 12px 26px rgba(15, 23, 42, 0.22);
+    }
+
+    .audio-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 1 1 260px;
+    }
+
+    .wave {
+      display: flex;
+      align-items: flex-end;
+      gap: 3px;
+      height: 24px;
+    }
+
+    .wave span {
+      width: 4px;
+      height: 7px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #34d399, #38bdf8);
+      transition: height 0.2s ease;
+    }
+
+    .audio-box.playing .wave span {
+      animation: waveMove 0.7s ease-in-out infinite;
+    }
+
+    .wave span:nth-child(2) { animation-delay: 0.1s; }
+    .wave span:nth-child(3) { animation-delay: 0.2s; }
+    .wave span:nth-child(4) { animation-delay: 0.3s; }
+    .wave span:nth-child(5) { animation-delay: 0.15s; }
+
+    @keyframes waveMove {
+      0%, 100% { height: 7px; }
+      50% { height: 24px; }
+    }
+
+    .audio-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 14px;
+      padding: 10px 18px;
+      font-family: 'Cairo', sans-serif;
+      font-weight: 800;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+    }
+
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .btn-play {
+      background: linear-gradient(135deg, #10b981, #06b6d4);
+      color: #052e16;
+      box-shadow: 0 8px 18px rgba(16, 185, 129, 0.32);
+    }
+
+    .btn-stop {
+      background: rgba(255, 255, 255, 0.16);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.24);
+    }
+
+    /* شبكة 3D وميزان المواطنة */
+    .stage-grid {
+      display: grid;
+      grid-template-columns: 1.35fr 0.95fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 900px) {
+      .stage-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .canvas-box {
+      position: relative;
+      width: 100%;
+      height: 320px;
+      border-radius: 20px;
+      overflow: hidden;
+      background: linear-gradient(180deg, #e0f2fe 0%, #f3e8ff 55%, #dcfce7 100%);
+      border: 2px solid rgba(59, 130, 246, 0.22);
+    }
+
+    .canvas-note {
+      position: absolute;
+      bottom: 12px;
+      left: 12px;
+      right: 12px;
+      background: rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(8px);
+      color: #fff;
+      padding: 10px 14px;
+      border-radius: 14px;
+      font-size: 0.84rem;
+      font-weight: 700;
+    }
+
+    .scale-box {
+      background: linear-gradient(145deg, #f8fafc, #eff6ff 55%, #fefce8);
+      border-radius: 20px;
+      padding: 18px;
+      border: 1px solid #dbeafe;
+      display: grid;
+      gap: 14px;
+      align-content: center;
+      flex: 1;
+    }
+
+    .scale-beam {
+      transform-origin: 170px 88px;
+      transition: transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .gauge-track {
+      width: 100%;
+      height: 14px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #f43f5e 0%, #f59e0b 50%, #10b981 100%);
+      position: relative;
+    }
+
+    .gauge-dot {
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #fff;
+      border: 4px solid #0f172a;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.35);
+      transition: left 0.65s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .gauge-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .score-big {
+      font-size: 1.65rem;
+      font-weight: 900;
+    }
+
+    .status-chip {
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 800;
+    }
+
+    .story-box {
+      background: linear-gradient(120deg, #fffbeb, #f0fdf4, #eff6ff);
+      border: 1px solid #e2e8f0;
+      border-radius: 18px;
+      padding: 18px;
+      line-height: 1.85;
+      font-size: 0.98rem;
+      font-weight: 600;
+      color: #1e293b;
+    }
+
+    .laws-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 14px;
+    }
+
+    .law-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 16px;
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
+    }
+
+    .law-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 24px rgba(15, 23, 42, 0.08);
+    }
+
+    .formula-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 10px;
+      font-weight: 900;
+      font-size: 0.9rem;
+      margin-bottom: 8px;
+    }
+
+    .c-blue { background: #dbeafe; color: #1d4ed8; }
+    .c-emerald { background: #d1fae5; color: #047857; }
+    .c-amber { background: #fef3c7; color: #b45309; }
+    .c-violet { background: #ede9fe; color: #6d28d9; }
+
+    .qa-box {
+      background: linear-gradient(135deg, #fdf4ff, #eff6ff);
+      border: 1px solid #e9d5ff;
+      border-radius: 20px;
+      padding: 18px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .choices {
+      display: grid;
+      gap: 10px;
+    }
+
+    .choice-btn {
+      text-align: right;
+      font-family: 'Cairo', sans-serif;
+      font-size: 0.93rem;
+      font-weight: 700;
+      padding: 12px 16px;
+      border-radius: 14px;
+      border: 2px solid #cbd5e1;
+      background: #fff;
+      color: var(--ink);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .choice-btn:hover {
+      border-color: var(--blue);
+      background: #f8fafc;
+    }
+
+    .choice-btn.ok {
+      border-color: var(--emerald);
+      background: #ecfdf5;
+      color: #065f46;
+    }
+
+    .choice-btn.no {
+      border-color: var(--rose);
+      background: #fff1f2;
+      color: #9f1239;
+    }
+
+    .qa-msg {
+      display: none;
+      padding: 12px 14px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.92rem;
+      line-height: 1.65;
+    }
+
+    .qa-msg.show {
+      display: block;
+    }
+
+    /* شريط التنقل السفلي (السابق / التالي) */
+    .pager-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      padding-top: 6px;
+    }
+
+    .btn-prev {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
+    .btn-next {
+      background: linear-gradient(135deg, var(--blue), var(--violet));
+      color: #fff;
+      box-shadow: 0 10px 22px rgba(37, 99, 235, 0.28);
+      padding: 12px 24px;
+      font-size: 0.96rem;
     }
   </style>
 </head>
 <body>
-
-  <div id="entry-gate">
-    <div class="entry-card">
-      <div class="student-badge">إعداد الطالبة: مروة بكاوي | القسم: 2 رياضي</div>
-      <h1>محكمة الطاقة 3D: الطاقة والمواطنة</h1>
-      <p>
-        تجربة تفاعلية ثلاثية الأبعاد في الفيزياء والتربية المدنية تناقش خمس قضايا واقعية حول استهلاك الطاقة،
-        السلاسل الطاقوية، الكفاءة، والفرق بين الطاقات المتجددة وغير المتجددة مع السرد الصوتي والمرئي.
-      </p>
-      <button id="start-court-btn" class="btn-primary">ابدأ المحاكمة واستمع للشرح</button>
-    </div>
-  </div>
-
-  <header class="top-bar">
-    <div class="top-bar-inner">
-      <div>
-        <h2 class="brand-title">محكمة الطاقة 3D: الطاقة والمواطنة</h2>
-        <div style="font-size: 0.9rem; font-weight: 700; color: var(--muted);">
-          إعداد الطالبة: مروة بكاوي | القسم: 2 رياضي
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="brand-badge">3D</div>
+        <div>
+          <div class="brand-name">محكمة الطاقة — الطاقة والمواطنة</div>
+          <div class="brand-sub">سرد صوتي ومجسمات ثلاثية الأبعاد تفاعلية</div>
         </div>
       </div>
-
-      <div class="citizen-meter-box">
-        <span>مؤشر المواطنة الطاقوية:</span>
-        <div class="meter-track">
-          <div id="citizen-meter-fill" class="meter-fill"></div>
-        </div>
-        <span id="citizen-meter-text">0%</span>
-      </div>
+      <nav class="nav-tabs" id="navTabs" aria-label="تنقل القضايا"></nav>
     </div>
   </header>
 
-  <nav class="section-nav" aria-label="أقسام المحكمة">
-    <button class="nav-tab active" data-section="intro">المقدمة والميزان</button>
-    <button class="nav-tab" data-section="case1">القضية 1: الشواحن</button>
-    <button class="nav-tab" data-section="case2">القضية 2: المصابيح</button>
-    <button class="nav-tab" data-section="case3">القضية 3: العزل الحراري</button>
-    <button class="nav-tab" data-section="case4">القضية 4: السخان الشمسي</button>
-    <button class="nav-tab" data-section="case5">القضية 5: التنقل</button>
-    <button class="nav-tab" data-section="summary">الخلاصة والشهادة</button>
-  </nav>
+  <main class="wrap">
+    <section class="card">
+      <div class="meta-row">
+        <span class="pill-tag" id="stepTag">القضية 1 من 5</span>
+        <span class="sub-tag" id="domainTag">القدرة والطاقة</span>
+      </div>
 
-  <main class="container">
-    <div>
-      <section class="panel video-box">
-        <div class="video-header">
-          <span>السرد المرئي والصوتي للقسم الحالي</span>
-          <span>الملف: <code id="current-video-name">intro.m4a</code></span>
-        </div>
+      <div class="claim-box" id="claimText"></div>
 
-        <video id="narration-video" controls preload="metadata" playsinline>
-          متصفحك لا يدعم تشغيل الوسائط HTML5.
-        </video>
-
-        <div class="video-controls">
-          <button id="toggle-play-btn" class="btn-secondary">تشغيل / إيقاف مؤقت</button>
-          <button id="replay-btn" class="btn-secondary">إعادة المقطع</button>
-          <button id="mute-btn" class="btn-secondary">كتم الصوت</button>
-          <label class="btn-secondary" style="cursor: pointer;">
-            معاينة ملف محلي
-            <input id="local-file-input" type="file" accept="video/*,audio/*" style="display: none;" />
-          </label>
-        </div>
-
-        <div id="video-fallback" class="fallback-msg">
-          لم يتم العثور على ملف <strong id="missing-file-label">intro.m4a</strong> في مجلد المشروع بعد. تأكدي من وضع الملف بامتداده الصحيح في جذر المشروع أو اختاري ملفاً محلياً للمعاينة أعلاه.
-        </div>
-      </section>
-
-      <section class="panel">
-        <div class="stage-toolbar">
-          <h3 id="scene-title" style="margin: 0; font-size: 1.1rem; font-weight: 800;">مشهد ميزان العدالة الطاقوية</h3>
-          <div class="mode-toggle">
-            <button id="waste-mode-btn" class="btn-secondary active">الوضع المُهدر للطاقة</button>
-            <button id="conscious-mode-btn" class="btn-secondary">سلوك المواطن الواعي</button>
+      <!-- زر الصوت فقط — بدون أي فيديو إطلاقاً -->
+      <div class="audio-box" id="audioBox">
+        <div class="audio-left">
+          <div class="wave" aria-hidden="true">
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <div>
+            <div style="font-weight: 800; font-size: 0.98rem;" id="audioLabel">السرد الصوتي للقضية</div>
+            <div style="font-size: 0.82rem; color: #cbd5e1;" id="audioInfo">اضغطي زر الصوت للاستماع إلى السرد مباشرة (بدون فيديو)</div>
           </div>
         </div>
-
-        <div id="canvas-wrapper"></div>
-
-        <div class="stage-caption">
-          <span>اسحب بالفأرة أو بالإصبع لتدوير المشهد 3D</span>
-          <span id="scene-status-label">الحالة الحالية: الوضع المُهدر للطاقة</span>
+        <div class="audio-actions">
+          <button type="button" class="btn btn-play" id="playSoundBtn">🔊 تشغيل الصوت</button>
+          <button type="button" class="btn btn-stop" id="stopSoundBtn">⏹️ إيقاف</button>
         </div>
-      </section>
-    </div>
-
-    <aside class="panel" id="analysis-panel">
-      <div class="info-block">
-        <h3 id="charge-title">نص التهمة</h3>
-        <p id="charge-text" style="margin: 0;"></p>
       </div>
+    </section>
 
-      <div class="info-block">
-        <h3>التحليل الفيزيائي والسلسلة الطاقوية</h3>
-        <p id="physics-text" style="margin: 0;"></p>
-        <div id="formula-box" class="formula-pill">E = P · t</div>
-      </div>
-
-      <div class="metrics-grid">
-        <div class="metric-card">
-          <div class="metric-label">الاستطاعة / الفاقد الطاقوي</div>
-          <div id="metric-power" class="metric-value">—</div>
+    <section class="stage-grid">
+      <div class="card" style="padding: 20px;">
+        <div class="meta-row">
+          <div style="font-weight: 900; font-size: 1.02rem;">🧊 مجسم ثلاثي الأبعاد للقضية</div>
+          <span class="sub-tag" id="modelBadge">مجسم الشاحن والحلقة</span>
         </div>
-        <div class="metric-card">
-          <div class="metric-label">الكفاءة / الأثر البيئي</div>
-          <div id="metric-efficiency" class="metric-value">—</div>
+        <div class="canvas-box" id="threeBox">
+          <div class="canvas-note" id="threeNote">مجسم ثلاثي الأبعاد يوضّح فكرة القضية وحركة الطاقة</div>
         </div>
       </div>
 
-      <div class="verdict-box" id="verdict-container">
-        <h3 style="margin: 0; font-size: 1.05rem; font-weight: 800;">الحكم المدني التفاعلي</h3>
-        <p id="verdict-question" style="margin: 6px 0 0; font-size: 0.95rem;"></p>
-        <div id="verdict-options" class="verdict-options"></div>
-        <div id="verdict-feedback" class="verdict-feedback"></div>
-      </div>
-    </aside>
-
-    <section id="summary-section" class="panel">
-      <h2 style="margin-top: 0; font-weight: 800;">الخلاصة: أنواع الطاقة ونصائح الحفاظ عليها</h2>
-      <p style="color: var(--muted); margin-top: 0;">
-        تعتمد الاستدامة الطاقوية على فهم مصادر الطاقة، تقليل الضياع الحراري والكهربائي، وتحويل المعرفة الفيزيائية إلى سلوك يومي مسؤول.
-      </p>
-
-      <div class="comparison-grid">
-        <div class="comp-card">
-          <h3 style="margin-top: 0;">الطاقات المتجددة</h3>
-          <p style="margin: 0;">مصادر طبيعية تتجدد باستمرار وتتميز بانخفاض انبعاثاتها الكربونية واستدامتها على المدى الطويل.</p>
-          <ul>
-            <li><strong>الطاقة الشمسية:</strong> تحويل الإشعاع الشمسي إلى حرارة (سخانات شمسية) أو كهرباء (خلايا كهروضوئية).</li>
-            <li><strong>الطاقة الريحية:</strong> تحويل الطاقة الحركية للرياح إلى طاقة ميكانيكية ثم كهربائية عبر العنفات.</li>
-            <li><strong>الطاقة المائية والكتلة الحيوية:</strong> الاستفادة من سقوط المياه أو المواد العضوية وفق ضوابط بيئية.</li>
-          </ul>
+      <div class="card" style="padding: 20px;">
+        <div class="meta-row">
+          <div style="font-weight: 900; font-size: 1.02rem;">⚖️ ميزان المواطنة الطاقية</div>
+          <span class="sub-tag">مؤشر الأثر</span>
         </div>
+        <div class="scale-box">
+          <svg viewBox="0 0 340 185" width="100%" height="175" aria-label="ميزان المواطنة الطاقية">
+            <rect x="132" y="164" width="76" height="11" rx="5.5" fill="#0f172a" />
+            <polygon points="155,164 185,164 175,84 165,84" fill="url(#colGrad)" />
+            <circle cx="170" cy="88" r="9" fill="#f59e0b" stroke="#0f172a" stroke-width="2.5" />
+            <g class="scale-beam" id="beamGroup">
+              <rect x="52" y="84" width="236" height="8" rx="4" fill="url(#barGrad)" />
+              <line x1="72" y1="92" x2="50" y2="132" stroke="#10b981" stroke-width="2.5" />
+              <line x1="72" y1="92" x2="94" y2="132" stroke="#10b981" stroke-width="2.5" />
+              <ellipse cx="72" cy="134" rx="28" ry="6" fill="#10b981" />
 
-        <div class="comp-card">
-          <h3 style="margin-top: 0;">الطاقات غير المتجددة</h3>
-          <p style="margin: 0;">مصادر أحفورية ذات مخزون محدود تتشكل عبر ملايين السنين ويؤدي احتراقها إلى انبعاثات ملوثة.</p>
-          <ul>
-            <li><strong>النفط ومشتقاته:</strong> يُستخدم بكثرة في النقل والصناعة، لكنه مصدر رئيسي لغازات الدفيئة.</li>
-            <li><strong>الغاز الطبيعي:</strong> أقل انبعاثاً نسبياً من الفحم والنفط، لكنه يظل مورداً ناضباً غير متجدد.</li>
-            <li><strong>الفحم الحجري:</strong> عالي الكثافة الكربونية ومساهم بارز في التلوث والاحتباس الحراري.</li>
-          </ul>
-        </div>
-      </div>
+              <line x1="268" y1="92" x2="246" y2="132" stroke="#f43f5e" stroke-width="2.5" />
+              <line x1="268" y1="92" x2="290" y2="132" stroke="#f43f5e" stroke-width="2.5" />
+              <ellipse cx="268" cy="134" rx="28" ry="6" fill="#f43f5e" />
+            </g>
+            <defs>
+              <linearGradient id="colGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#2563eb" />
+                <stop offset="100%" stop-color="#0f172a" />
+              </linearGradient>
+              <linearGradient id="barGrad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#10b981" />
+                <stop offset="50%" stop-color="#f59e0b" />
+                <stop offset="100%" stop-color="#f43f5e" />
+              </linearGradient>
+            </defs>
+          </svg>
 
-      <h3 style="font-weight: 800;">نصائح عملية للحفاظ على الطاقة</h3>
-      <div class="tips-grid">
-        <div class="tip-card">
-          <h4 style="margin: 0 0 6px;">في المنزل</h4>
-          <p style="margin: 0; font-size: 0.93rem;">فصل الشواحن والمعدات غير المستخدمة، تفضيل مصابيح LED، وتحسين العزل الحراري للنوافذ والجدران.</p>
-        </div>
-        <div class="tip-card">
-          <h4 style="margin: 0 0 6px;">في الثانوية والمدرسة</h4>
-          <p style="margin: 0; font-size: 0.93rem;">إطفاء الإنارة والمكيفات عند مغادرة القاعات، الاستفادة من الإضاءة الطبيعية، ونشر الوعي بين الزملاء.</p>
-        </div>
-        <div class="tip-card">
-          <h4 style="margin: 0 0 6px;">في التنقل اليومي</h4>
-          <p style="margin: 0; font-size: 0.93rem;">تفضيل النقل المشترك أو المشي للمسافات القريبة لتقليل استهلاك الوقود والانبعاثات للفرد.</p>
-        </div>
-      </div>
-
-      <div class="certificate-box">
-        <div class="student-badge">إعداد الطالبة: مروة بكاوي | القسم: 2 رياضي</div>
-        <h3 style="margin: 6px 0; font-size: 1.45rem; font-weight: 800;">شهادة مواطن صديق للطاقة والبيئة</h3>
-        <p style="margin: 0; color: var(--muted);">يمكنك تعديل الاسم الظاهر في الشهادة إذا رغبتِ في منحها لزميل أو مشارك:</p>
-
-        <div class="cert-input-row">
-          <input id="cert-name-input" type="text" value="الطالبة: مروة بكاوي — القسم: 2 رياضي" aria-label="اسم صاحب الشهادة" />
-        </div>
-
-        <div class="cert-preview">
-          <div style="font-size: 0.92rem; color: var(--muted);">تُمنح هذه الشهادة تقديراً للوعي الطاقوي والالتزام الفيزيائي والمدني إلى:</div>
-          <div id="cert-display-name" style="font-size: 1.3rem; font-weight: 800; margin: 8px 0;">
-            الطالبة: مروة بكاوي — القسم: 2 رياضي
+          <div class="gauge-track">
+            <div class="gauge-dot" id="gaugeDot" style="left: 50%;"></div>
           </div>
-          <div style="font-size: 0.92rem;">مشروع محكمة الطاقة 3D: الطاقة والمواطنة</div>
-          <div class="cert-author">إعداد الطالبة: مروة بكاوي | القسم: 2 رياضي</div>
+
+          <div class="gauge-row">
+            <div>
+              <span class="score-big" id="scoreNum">50</span>
+              <span style="color: var(--muted); font-weight: 800;"> / 100</span>
+            </div>
+            <span class="status-chip" id="scoreChip">متوسط</span>
+          </div>
         </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div style="font-weight: 900; font-size: 1.04rem;">📖 السرد المرئي والتحليل الفيزيائي</div>
+      <div class="story-box" id="storyText"></div>
+      <div class="laws-grid" id="lawsGrid"></div>
+
+      <div class="qa-box">
+        <div style="font-weight: 900; font-size: 1rem; color: #311042;">❓ سؤال المحكمة</div>
+        <div style="font-weight: 700;" id="qaQuestion"></div>
+        <div class="choices" id="qaChoices"></div>
+        <div class="qa-msg" id="qaMsg"></div>
+      </div>
+
+      <div class="pager-bar">
+        <button type="button" class="btn btn-prev" id="prevBtn">→ السابق</button>
+        <button type="button" class="btn btn-next" id="nextBtn">التالي ←</button>
       </div>
     </section>
   </main>
 
-  <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
   <script>
-    const SECTIONS_DATA = {
-      intro: {
-        mediaCandidates: ["intro.m4a", "intro.mp3", "intro.mp4"],
-        video: "intro.m4a",
-        sceneTitle: "مشهد ميزان العدالة الطاقوية",
-        chargeTitle: "مدخل المحكمة: ميزان العدالة الطاقوية",
-        chargeText: "تُحاكم هذه المنصة السلوكيات اليومية التي تهدر الطاقة أو تُحسن توظيفها وفق مبدأ انحفاظ الطاقة والمسؤولية المدنية.",
-        physicsText: "الطاقة لا تفنى ولا تُستحدث من العدم بل تتحول من شكل إلى آخر؛ والهدف هو توجيه التحويل نحو الشكل المفيد وتقليل الضياع غير المرغوب.",
-        formula: "E_utile = η · E_absorbée",
-        wastePower: "هدر مرتفع (فقد حراري وانبعاثات)",
-        wasteEff: "كفاءة منخفضة وسلوك غير متوازن",
-        consciousPower: "توظيف رشيد للطاقة",
-        consciousEff: "كفاءة عالية ومواطنة بيئية",
-        verdictQ: "ما جوهر «العدالة الطاقوية» في حياتنا اليومية؟",
-        options: [
-          { text: "استخدام أكبر قدر ممكن من الطاقة دون حساب", correct: false, msg: "غير دقيق: الوفرة لا تعني الهدر، فالكفاءة والاعتدال أساس الاستدامة." },
-          { text: "تحقيق المنفعة بأقل هدر ممكن مع مراعاة الأثر البيئي وحقوق الأجيال", correct: true, msg: "أحسنتِ! التوازن بين الحاجة والكفاءة والمسؤولية هو جوهر العدالة الطاقوية." }
-        ]
-      },
-      case1: {
-        mediaCandidates: ["case1.mp4"],
-        video: "case1.mp4",
-        sceneTitle: "القضية 1: الشواحن الموصولة طوال اليوم",
-        chargeTitle: "نص التهمة: بقاء الشواحن في المأخذ دون جهاز",
-        chargeText: "يُترك الشاحن موصولاً بالمأخذ الكهربائي لساعات طويلة رغم عدم شحن أي هاتف أو حاسوب.",
-        physicsText: "تستمر المحولات الصغيرة والدوائر الداخلية في سحب تيار ضعيف وتحويل جزء من الطاقة الكهربائية إلى حرارة بفعل مفعول جول (R · I²).",
-        formula: "E = P · t   |   P_pertes ≈ R · I²",
-        wastePower: "استهلاك مستمر 24/24 + حرارة مهدرة",
-        wasteEff: "كفاءة صفرية أثناء عدم الشحن",
-        consciousPower: "فصل الشاحن عند الانتهاء",
-        consciousEff: "انعدام الفاقد المستمر وحماية البطارية",
-        verdictQ: "ما التصرف الصحيح بعد اكتمال شحن الهاتف؟",
-        options: [
-          { text: "فصل الشاحن من المأخذ الكهربائي", correct: true, msg: "صحيح! فصل الشاحن يوقف الاستهلاك المستمر والضياع الحراري." },
-          { text: "تركه موصولاً لأنه يستهلك قليلاً في المرة الواحدة", correct: false, msg: "انتبهي: تراكم الزمن (t) يجعل القيم الصغيرة مؤثرة على المدى الطويل." }
-        ]
-      },
-      case2: {
-        mediaCandidates: ["case2.mp4"],
-        video: "case2.mp4",
-        sceneTitle: "القضية 2: المصباح التقليدي مقابل مصباح LED",
-        chargeTitle: "نص التهمة: تفضيل الإنارة عالية الضياع الحراري",
-        chargeText: "استخدام مصباح متوهج تقليدي بدلاً من مصباح LED لتوفير نفس مستوى الإضاءة تقريباً.",
-        physicsText: "في المصباح التقليدي يتحول معظم الطاقة الكهربائية إلى حرارة (أشعة تحت حمراء) وجزء صغير فقط إلى ضوء مرئي، بينما يحقق LED كفاءة إشعاعية أعلى بكثير.",
-        formula: "η = (E_lumineuse / E_électrique) · 100%",
-        wastePower: "استطاعة أعلى (مثلاً 60W–100W) وحرارة عالية",
-        wasteEff: "مردود ضوئي ضعيف جداً",
-        consciousPower: "استطاعة أقل (مثلاً 9W–12W) وحرارة منخفضة",
-        consciousEff: "كفاءة إضاءة عالية وعمر أطول",
-        verdictQ: "لماذا يتفوق مصباح LED فيزيائياً على المصباح التقليدي؟",
-        options: [
-          { text: "لأنه يحول نسبة أكبر من الطاقة الكهربائية إلى ضوء بدلاً من الحرارة", correct: true, msg: "ممتاز! ارتفاع الكفاءة يعني إضاءة أفضل مع طاقة كهربائية أقل." },
-          { text: "لأنه لا يخضع لقانون انحفاظ الطاقة", correct: false, msg: "غير صحيح: كل الأجهزة تخضع لانحفاظ الطاقة، والفرق في نسب التحويل." }
-        ]
-      },
-      case3: {
-        mediaCandidates: ["case3.mp4"],
-        video: "case3.mp4",
-        sceneTitle: "القضية 3: العزل الحراري للمنزل",
-        chargeTitle: "نص التهمة: تسرب الحرارة عبر الجدران والنوافذ غير المعزولة",
-        chargeText: "ترك المنزل دون عزل حراري جيد مما يرفع حاجة التدفئة شتاءً والتبريد صيفاً.",
-        physicsText: "تنتقل الحرارة تلقائياً من الوسط الأكثر سخونة إلى الوسط الأقل سخونة عبر التوصيل والحمل والإشعاع؛ والعزل الجيد يقلل التدفق الحراري.",
-        formula: "Φ = k · A · (ΔT / e)",
-        wastePower: "تدفق حراري مرتفع نحو الخارج",
-        wasteEff: "حمل حراري كبير على أجهزة التدفئة/التبريد",
-        consciousPower: "انخفاض كبير في تسرب الحرارة",
-        consciousEff: "راحة حرارية مستقرة واقتصاد في الطاقة",
-        verdictQ: "كيف يساهم العزل الحراري في تقليل استهلاك الطاقة؟",
-        options: [
-          { text: "يبطئ انتقال الحرارة بين الداخل والخارج فيقلل الحاجة للتدفئة أو التبريد", correct: true, msg: "أحسنتِ! تقليل ΔT والفقد الحراري يخفف العبء الطاقوي بشكل مباشر." },
-          { text: "يولّد طاقة كهربائية ذاتياً داخل الجدران", correct: false, msg: "غير صحيح: العزل يمنع أو يقلل انتقال الحرارة ولا يخلق طاقة من العدم." }
-        ]
-      },
-      case4: {
-        mediaCandidates: ["case4.mp4"],
-        video: "case4.mp4",
-        sceneTitle: "القضية 4: السخان الشمسي",
-        chargeTitle: "نص التهمة: تجاهل الطاقة الشمسية المتاحة لتسخين المياه",
-        chargeText: "الاعتماد الكامل على السخان الكهربائي التقليدي رغم توفر الإشعاع الشمسي.",
-        physicsText: "يمتص اللاقط الشمسي الإشعاع الكهرومغناطيسي للشمس ويرفع درجة حرارة الماء وفق العلاقة الحرارية دون سحب مباشر من الشبكة الكهربائية.",
-        formula: "Q = m · c · ΔT",
-        wastePower: "سحب كهربائي مباشر مرتفع لتسخين الماء",
-        wasteEff: "اعتماد أكبر على الشبكة والوقود الأحفوري",
-        consciousPower: "استثمار الطاقة الشمسية الحرارية النظيفة",
-        consciousEff: "توفير كهربائي ملحوظ وأثر بيئي أقل",
-        verdictQ: "ما الميزة الأبرز للسخان الشمسي في سياق الطاقة والمواطنة؟",
-        options: [
-          { text: "يستفيد من مصدر متجدد ونظيف لتسخين الماء وتخفيف الضغط عن الشبكة", correct: true, msg: "رائع! توظيف الطاقة الشمسية يجمع بين الفيزياء التطبيقية والمواطنة البيئية." },
-          { text: "يعمل بكفاءة قصوى في الظلام التام دون تخزين حراري", correct: false, msg: "غير دقيق: يعتمد على الإشعاع الشمسي ويحتاج إلى خزان معزول لحفظ الحرارة." }
-        ]
-      },
-      case5: {
-        mediaCandidates: ["case5.mp4"],
-        video: "case5.mp4",
-        sceneTitle: "القضية 5: المواطنة في التنقل",
-        chargeTitle: "نص التهمة: التنقل الفردي المفرط للرحلات القصيرة",
-        chargeText: "استخدام سيارة فردية في تنقلات قصيرة أو مزدحمة يمكن فيها المشاركة أو المشي.",
-        physicsText: "يتطلب تحريك كتلة السيارة والركاب طاقة حركية ووقوداً، وعند تقسيم الطاقة المستهلكة على شخص واحد فقط يرتفع نصيب الفرد من الطاقة والانبعاثات.",
-        formula: "E_par_personne = E_totale / N_passagers",
-        wastePower: "نصيب مرتفع جداً من الطاقة والانبعاثات لكل راكب",
-        wasteEff: "ازدحام وكفاءة منخفضة للرحلة الفردية",
-        consciousPower: "تقاسم الطاقة أو التحرك النشط (المشي/النقل المشترك)",
-        consciousEff: "خفض استهلاك الفرد وتحسين جودة الهواء",
-        verdictQ: "كيف يقلل النقل المشترك أو المشي من الأثر الطاقوي للرحلة؟",
-        options: [
-          { text: "يوزع الطاقة والانبعاثات على عدد أكبر من الأفراد أو يلغي استهلاك الوقود للمشي", correct: true, msg: "أحسنتِ! تقليل نصيب الفرد من الطاقة خطوة عملية نحو مدينة مستدامة." },
-          { text: "يزيد كتلة المركبة بلا فائدة في كل الحالات", correct: false, msg: "غير صحيح: الفائدة الجماعية والبيئية للنقل المشترك والمشي واضحة ومثبتة." }
-        ]
-      },
-      summary: {
-        mediaCandidates: ["summary.mp4"],
-        video: "summary.mp4",
-        sceneTitle: "مشهد الأرض والطاقات المتجددة",
-        chargeTitle: "الخلاصة: رؤية شاملة للطاقة والمواطنة",
-        chargeText: "الانتقال نحو مستقبل مستدام يجمع بين فهم القوانين الفيزيائية، والمفاضلة الواعية بين مصادر الطاقة، وتبني عادات يومية مسؤولة.",
-        physicsText: "كل تحول طاقوي يخضع لقوانين الفيزياء، والمواطن الواعي هو من يختار الحل الأعلى كفاءة والأقل ضرراً بالبيئة.",
-        formula: "Σ E_entrée = Σ E_utile + Σ E_perdue",
-        wastePower: "استنزاف الموارد وارتفاع الانبعاثات",
-        wasteEff: "هدر تراكمي غير مستدام",
-        consciousPower: "تنوع متجدد وترشيد مستمر",
-        consciousEff: "استدامة بيئية واقتصادية",
-        verdictQ: "ما الخطوة الأكثر تأثيراً لترسيخ ثقافة ترشيد الطاقة؟",
-        options: [
-          { text: "الجمع بين الوعي العلمي والممارسة اليومية المستمرة", correct: true, msg: "ممتاز! العلم والسلوك اليومي معاً يصنعان التغيير الحقيقي." },
-          { text: "الاكتفاء بالشعارات دون تغيير العادات اليومية", correct: false, msg: "غير كافٍ: الأثر الحقيقي يظهر عند تحويل الفكرة إلى سلوك عملي." }
-        ]
-      }
-    };
-
-    let currentSection = "intro";
-    let isWasteMode = true;
-    const answeredSections = new Set();
-
-    const entryGate = document.getElementById("entry-gate");
-    const startBtn = document.getElementById("start-court-btn");
-    const videoEl = document.getElementById("narration-video");
-    const videoNameEl = document.getElementById("current-video-name");
-    const fallbackEl = document.getElementById("video-fallback");
-    const missingLabelEl = document.getElementById("missing-file-label");
-    const summarySection = document.getElementById("summary-section");
-
-    let candidateIndex = 0;
-    let currentCandidates = ["intro.m4a", "intro.mp3", "intro.mp4"];
-    let shouldAutoplayCurrent = false;
-
-    function updateCitizenMeter() {
-      const totalQuestions = Object.keys(SECTIONS_DATA).length;
-      const pct = Math.round((answeredSections.size / totalQuestions) * 100);
-      document.getElementById("citizen-meter-fill").style.width = pct + "%";
-      document.getElementById("citizen-meter-text").textContent = pct + "%";
-    }
-
-    function tryNextCandidate() {
-      if (candidateIndex < currentCandidates.length) {
-        const nextFile = currentCandidates[candidateIndex++];
-        videoNameEl.textContent = nextFile;
-        missingLabelEl.textContent = currentCandidates.join(" أو ");
-        videoEl.src = nextFile;
-        videoEl.load();
-        if (shouldAutoplayCurrent) {
-          videoEl.play().catch(() => {});
+    const PAGES = [
+      {
+        id: "case1",
+        tab: "1 · الشاحن",
+        badge: "القضية 1 من 5",
+        domain: "القدرة والطاقة المستهلكة",
+        claim: "دفاع المتهم: «الشاحن لا يستهلك شيئاً إذا لم يكن الهاتف موصولاً به» — فهل هذا صحيح فيزيائياً؟",
+        audioFile: "case1.mp3",
+        fallbackAudio: "أهلاً بكم في محكمة الطاقة ثلاثية الأبعاد. في القضية الأولى، يظن المتهم أن الشاحن لا يستهلك طاقة عندما لا يكون الهاتف متصلاً به. لكن بقاء الشاحن موصولاً بالمقبس يبقي دوائره نشطة، ومع مرور الزمن تتراكم القدرة الصغيرة وتصبح طاقة مستهلكة مهدرة.",
+        score: 35,
+        tilt: 14,
+        modelType: "charger",
+        modelBadge: "مجسم الشاحن والمقبس",
+        modelNote: "جسم الشاحن وحلقة التدفق يوضّحان استمرار الاستهلاك عند بقائه متصلاً بالشبكة",
+        story: "حتى من دون هاتف، يبقى محوّل الشاحن متصلاً بالمنبع الكهربائي. القدرة اللحظية قد تبدو صغيرة، لكن استمرارها ساعات وأياماً يرفع الطاقة المستهلكة E = P × t دون تحقيق فائدة فعلية.",
+        laws: [
+          { f: "E = P × t", c: "c-blue", t: "الطاقة المستهلكة", d: "تزداد بزيادة القدرة أو بطول زمن الاتصال والتشغيل." },
+          { f: "r = Eu / Ec", c: "c-emerald", t: "المردود الطاقي", d: "عند عدم شحن جهاز مفيد، يكون المردود العملي منخفضاً جداً." },
+          { f: "فقد حراري", c: "c-amber", t: "الحرارة الضائعة", d: "جزء يسير من القدرة يتحول إلى حرارة داخل المحوّل." }
+        ],
+        qa: {
+          q: "ما الخطأ في قول المتهم عن الشاحن غير الموصول بالهاتف؟",
+          options: [
+            "بقاء الشاحن موصولاً يسبب استهلاكاً مستمراً يتراكم مع الزمن",
+            "الشاحن يولّد طاقة كهربائية ويعيدها للمنزل",
+            "القدرة الكهربائية تصبح سالبة عند فصل الهاتف"
+          ],
+          ans: 0,
+          ok: "صحيح! لأن E = P × t، فاستمرار الاتصال مع الزمن يراكم الطاقة المستهلكة حتى لو كانت القدرة صغيرة.",
+          no: "ليست هذه الفكرة الصحيحة — راجعي علاقة الطاقة بالزمن E = P × t عند بقاء الشاحن متصلاً."
         }
+      },
+      {
+        id: "case2",
+        tab: "2 · الإضاءة",
+        badge: "القضية 2 من 5",
+        domain: "الإنارة والكفاءة",
+        claim: "ادعاء المتهم: «مصباح واحد منخفض القدرة لا يؤثر إن تُرك مضاءً في غرفة فارغة طوال الليل».",
+        audioFile: "case2.mp3",
+        fallbackAudio: "في القضية الثانية، يبرر المتهم ترك المصباح مضاءً في غرفة فارغة طوال الليل. إطفاء الإنارة عند مغادرة الغرفة واعتماد المصابيح عالية الكفاءة يحفظان الطاقة ويعكسان مواطنة طاقية مسؤولة.",
+        score: 45,
+        tilt: 9,
+        modelType: "bulb",
+        modelBadge: "مجسم المصباح والهالة",
+        modelNote: "المصباح والهالة المدارية يوضّحان أثر الزمن وتفضيل الإنارة عالية الكفاءة",
+        story: "إطالة زمن تشغيل الإنارة في مكان غير مستخدم يرفع الاستهلاك التراكمي. المواطنة الطاقية تعني إطفاء الضوء عند الخروج واستخدام مصابيح موفرة عالية الكفاءة.",
+        laws: [
+          { f: "P = E / t", c: "c-emerald", t: "القدرة الكهربائية", d: "معدل تحويل الطاقة خلال الزمن ويُقاس بالواط (W)." },
+          { f: "كفاءة عالية", c: "c-blue", t: "اختيار الإنارة", d: "المصابيح الفعالة تعطي إضاءة مناسبة بقدرة أقل وهدر أدنى." },
+          { f: "مواطنة", c: "c-amber", t: "سلوك يومي", d: "إطفاء الإنارة غير الضرورية عادة بسيطة ذات أثر واضح." }
+        ],
+        qa: {
+          q: "كيف نطبّق المواطنة الطاقية في الإنارة المنزلية؟",
+          options: [
+            "إطفاء الإنارة عند مغادرة الغرفة واختيار مصابيح عالية الكفاءة",
+            "ترك الإنارة مشتعلة طوال الليل لتدفئة الغرفة",
+            "رفع قدرة المصباح إلى أقصى قيمة دائماً"
+          ],
+          ans: 0,
+          ok: "أحسنتِ! إطفاء الضوء غير الضروري واختيار الإنارة الفعالة يقللان الهدر مباشرة.",
+          no: "حاولي مرة أخرى — فكّري في دور الزمن وكفاءة المصباح."
+        }
+      },
+      {
+        id: "case3",
+        tab: "3 · التبريد",
+        badge: "القضية 3 من 5",
+        domain: "التحولات الحرارية",
+        claim: "مرافعة المتهم: «ضبط التبريد على درجة منخفضة جداً يبرّد الغرفة بسرعة دون كلفة إضافية كبيرة».",
+        audioFile: "case3.mp3",
+        fallbackAudio: "في القضية الثالثة، يظن المتهم أن خفض درجة التبريد كثيراً لا يرتب كلفة إضافية معتبرة. كلما زاد الفارق الحراري وزاد تسرب الهواء، زاد عمل التبريد واستهلاك الطاقة.",
+        score: 40,
+        tilt: 11,
+        modelType: "cooler",
+        modelBadge: "مجسم المروحة والضبط الحراري",
+        modelNote: "الشفرات الدوارة والحلقات الحرارية تمثّل عمل التبريد وتأثير الفارق الحراري",
+        story: "زيادة الفارق الحراري بين الداخل والخارج تجبر نظام التبريد على العمل لفترات أطول وبجهد أكبر. الضبط المعتدل مع غلق النوافذ يوازن بين الراحة والاقتصاد في الطاقة.",
+        laws: [
+          { f: "ΔT معتدل", c: "c-violet", t: "الاعتدال الحراري", d: "تجنب التبريد المفرط يقلل الطاقة المستهلكة بشكل ملموس." },
+          { f: "عزل جيد", c: "c-blue", t: "منع التسرب", d: "إغلاق النوافذ يحفظ البرودة ويخفف حمل التبريد." },
+          { f: "استقرار", c: "c-amber", t: "تخفيف الذروة", d: "الاعتدال يحدّ من الضغط على الشبكة في أوقات الذروة." }
+        ],
+        qa: {
+          q: "ما الأسلوب الأفضل لتقليل استهلاك التبريد؟",
+          options: [
+            "ضبط درجة حرارة معتدلة مع إحكام إغلاق النوافذ",
+            "خفض الدرجة إلى أدنى حد مع ترك النوافذ مفتوحة",
+            "تشغيله بأقصى سرعة دون توقف"
+          ],
+          ans: 0,
+          ok: "ممتاز! الضبط المعتدل ومنع تسرب الحرارة يقللان استهلاك الطاقة بوضوح.",
+          no: "غير دقيقة — تذكّري أثر الفارق الحراري وتسرب الهواء."
+        }
+      },
+      {
+        id: "case4",
+        tab: "4 · التنقل",
+        badge: "القضية 4 من 5",
+        domain: "النقل والمواطنة",
+        claim: "حجة المتهم: «الاعتماد الدائم على السيارة في كل مشوار قصير أمر فردي ولا يخص المصلحة العامة».",
+        audioFile: "case4.mp3",
+        fallbackAudio: "في القضية الرابعة، يرى المتهم أن التنقل الفردي شأن خاص فقط. غير أن اختيارات التنقل تؤثر على استهلاك الطاقة والبيئة، والمواطنة تعني الجمع بين الحركة الهادئة والبدائل المستدامة.",
+        score: 58,
+        tilt: -7,
+        modelType: "mobility",
+        modelBadge: "مجسم الحركة والمدار",
+        modelNote: "المحور المتحرك والمدارات يمثّلان التنقل المسؤول وتقليل الهدر الحركي",
+        story: "التنقل يرتبط بالطاقة والبيئة والازدحام. المشي في المسافات القصيرة، واستخدام النقل المشترك، والقيادة المتزنة تجعل التنقل أكثر مواطنة واستدامة.",
+        laws: [
+          { f: "Ec = ½ m v²", c: "c-amber", t: "الطاقة الحركية", d: "تزداد مع الكتلة ومع مربع السرعة؛ القيادة الهادئة تحدّ من الهدر." },
+          { f: "نقل مشترك", c: "c-emerald", t: "مشاركة الأثر", d: "تقاسم الرحلة يقلل نصيب الفرد من استهلاك الطاقة." },
+          { f: "مشي", c: "c-blue", t: "مشاوير قصيرة", d: "المشي للمسافات القريبة يجمع بين الصحة وتوفير الطاقة." }
+        ],
+        qa: {
+          q: "أي سلوك يعكس مواطنة طاقية أفضل في التنقل؟",
+          options: [
+            "المشي للمسافات القريبة أو استخدام النقل المشترك والقيادة المتزنة",
+            "القيادة السريعة المتقطعة في كل مسافة مهما قصرت",
+            "ترك المحرك يعمل دون حاجة لفترات طويلة"
+          ],
+          ans: 0,
+          ok: "صحيح! المشي والنقل المشترك والقيادة المتزنة خيارات مسؤولة للطاقة والبيئة.",
+          no: "ليست الإجابة الصحيحة — فكّري في البدائل الأكثر استدامة للطاقة."
+        }
+      },
+      {
+        id: "case5",
+        tab: "5 · الصيانة",
+        badge: "القضية 5 من 5",
+        domain: "الكفاءة والصيانة",
+        claim: "قول المتهم: «الصيانة الدورية وتنظيف الأجهزة لا يغيّران شيئاً ما دامت الأجهزة تعمل».",
+        audioFile: "case5.mp3",
+        fallbackAudio: "في القضية الخامسة، يقلل المتهم من أهمية الصيانة ما دام الجهاز يعمل. الصيانة الوقائية تحافظ على الكفاءة، تقلل الفواقد، وتطيل عمر الأجهزة.",
+        score: 68,
+        tilt: -11,
+        modelType: "maintenance",
+        modelBadge: "مجسم الصيانة والتوازن",
+        modelNote: "البنية المتماسكة والحلقة الداعمة تمثّلان حفظ الكفاءة بالصيانة المنتظمة",
+        story: "إهمال الصيانة يزيد الفواقد ويضعف الأداء مع الزمن. العناية المنتظمة تحفظ الكفاءة التشغيلية وتمنع الأعطال المفاجئة وتطيل عمر التجهيزات.",
+        laws: [
+          { f: "صيانة وقائية", c: "c-emerald", t: "حفظ الكفاءة", d: "الاهتمام الدوري يحافظ على مردود الجهاز وكفاءته." },
+          { f: "تقليل الفواقد", c: "c-blue", t: "منع الضياع", d: "معالجة الخلل مبكراً تمنع تحول الطاقة إلى فواقد غير مفيدة." },
+          { f: "عمر أطول", c: "c-violet", t: "استدامة الأجهزة", d: "الصيانة تطيل عمر الجهاز وتقلل الحاجة للاستبدال المبكر." }
+        ],
+        qa: {
+          q: "لماذا تُعدّ الصيانة الدورية مهمة حتى لو كان الجهاز يعمل؟",
+          options: [
+            "لأنها تحافظ على الكفاءة وتقلل الفواقد وتطيل عمر الجهاز",
+            "لأنها تزيد استهلاك الكهرباء دون سبب",
+            "لأنها تلغي الحاجة إلى الترشيد"
+          ],
+          ans: 0,
+          ok: "ممتاز! الصيانة الدورية تحفظ الكفاءة وتمنع الفواقد وتطيل عمر الجهاز.",
+          no: "جرّبي خياراً آخر — ركّزي على أثر الصيانة في الكفاءة وعمر الجهاز."
+        }
+      },
+      {
+        id: "summary",
+        tab: "الملخص",
+        badge: "الخلاصة الختامية",
+        domain: "ميزان المواطنة الطاقية",
+        claim: "حكم المحكمة: المواطنة الطاقية وعي فيزيائي وسلوك يومي مسؤول يوازن بين حاجتنا للطاقة واستدامتها للأجيال القادمة.",
+        audioFile: "summary.mp3",
+        fallbackAudio: "في ختام محكمة الطاقة: الوعي الفيزيائي مع السلوك المسؤول يصنعان التوازن الحقيقي بين حاجتنا للطاقة واستدامة الموارد للأجيال القادمة.",
+        score: 88,
+        tilt: -16,
+        modelType: "summary",
+        modelBadge: "مجسم التوازن والختام",
+        modelNote: "تكامل العناصر والمدارات يمثّل التوازن بين الفهم الفيزيائي والمواطنة الطاقية",
+        story: "تجمع محكمة الطاقة بين الفهم الفيزيائي لقوانين القدرة والطاقة والمردود، وبين السلوك المسؤول في المنزل والتنقل والصيانة، لبناء وعي طاقي مستدام.",
+        laws: [
+          { f: "E = P × t", c: "c-blue", t: "الزمن والقدرة", d: "مراقبة مدة التشغيل والقدرة أساس التحكم بالاستهلاك." },
+          { f: "r = Eu / Ec", c: "c-emerald", t: "المردود والكفاءة", d: "تعظيم الاستفادة المفيدة وتقليل الهدر." },
+          { f: "مواطنة طاقية", c: "c-amber", t: "مسؤولية مستدامة", d: "سلوك واعٍ يحفظ الموارد للجميع." }
+        ],
+        qa: {
+          q: "ما خلاصة المواطنة الطاقية في محكمة الطاقة؟",
+          options: [
+            "الجمع بين الوعي الفيزيائي والسلوك المسؤول المستدام",
+            "استهلاك الطاقة دون أي اعتبار للزمن أو الكفاءة",
+            "تأجيل أي ترشيد أو صيانة دائماً"
+          ],
+          ans: 0,
+          ok: "رائع! الوعي الفيزيائي مع السلوك المسؤول هو جوهر المواطنة الطاقية.",
+          no: "ليست الإجابة الصحيحة — اختاري الخيار الذي يجمع بين الفهم العلمي والسلوك المسؤول."
+        }
+      }
+    ];
+
+    let index = 0;
+    let activeAudio = null;
+
+    // مشهد Three.js بمجسمات مبتكرة تعبّر عن كل قضية
+    let scene, camera, renderer, rootGroup, coreMesh, orbitMesh, satMesh, accentMesh;
+
+    function buildModelForType(type, primaryHex, accentHex) {
+      while (rootGroup.children.length > 0) {
+        rootGroup.remove(rootGroup.children[0]);
+      }
+
+      const mainMat = new THREE.MeshStandardMaterial({
+        color: primaryHex,
+        roughness: 0.25,
+        metalness: 0.35
+      });
+      const subMat = new THREE.MeshStandardMaterial({
+        color: accentHex,
+        roughness: 0.25,
+        metalness: 0.45
+      });
+      const goldMat = new THREE.MeshStandardMaterial({
+        color: 0xfacc15,
+        emissive: 0xd97706,
+        emissiveIntensity: 0.25
+      });
+
+      if (type === "charger") {
+        // جسم الشاحن + رأس المقبس + حلقة تدفق
+        const body = new THREE.Mesh(new THREE.BoxGeometry(1.1, 1.45, 0.75), mainMat);
+        const prong1 = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 0.45, 16), subMat);
+        prong1.position.set(-0.26, 0.92, 0);
+        const prong2 = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 0.45, 16), subMat);
+        prong2.position.set(0.26, 0.92, 0);
+        orbitMesh = new THREE.Mesh(new THREE.TorusGeometry(1.75, 0.06, 16, 72), goldMat);
+        orbitMesh.rotation.x = Math.PI / 2.5;
+        coreMesh = body;
+        satMesh = prong1;
+        accentMesh = prong2;
+        rootGroup.add(body, prong1, prong2, orbitMesh);
+      } else if (type === "bulb") {
+        // مصباح (كرة علوية + قاعدة) + هالة مدارية
+        const glass = new THREE.Mesh(new THREE.SphereGeometry(0.95, 28, 28), goldMat);
+        glass.position.y = 0.25;
+        const base = new THREE.Mesh(new THREE.CylinderGeometry(0.45, 0.35, 0.65, 20), mainMat);
+        base.position.y = -0.85;
+        orbitMesh = new THREE.Mesh(new THREE.TorusGeometry(1.65, 0.05, 16, 72), subMat);
+        orbitMesh.rotation.x = Math.PI / 3;
+        coreMesh = glass;
+        satMesh = base;
+        accentMesh = orbitMesh;
+        rootGroup.add(glass, base, orbitMesh);
+      } else if (type === "cooler") {
+        // إطار التبريد + شفرات مروحة
+        const frame = new THREE.Mesh(new THREE.TorusGeometry(1.25, 0.14, 16, 48), mainMat);
+        const blade1 = new THREE.Mesh(new THREE.BoxGeometry(1.9, 0.28, 0.08), subMat);
+        const blade2 = new THREE.Mesh(new THREE.BoxGeometry(1.9, 0.28, 0.08), goldMat);
+        blade2.rotation.z = Math.PI / 2;
+        coreMesh = frame;
+        satMesh = blade1;
+        accentMesh = blade2;
+        rootGroup.add(frame, blade1, blade2);
+      } else if (type === "mobility") {
+        // هيكل مركبة مبسّط + عجلتان + مدار
+        const chassis = new THREE.Mesh(new THREE.BoxGeometry(1.85, 0.65, 0.9), mainMat);
+        const cabin = new THREE.Mesh(new THREE.BoxGeometry(1.05, 0.52, 0.8), subMat);
+        cabin.position.set(-0.1, 0.52, 0);
+        const wheelL = new THREE.Mesh(new THREE.CylinderGeometry(0.35, 0.35, 0.22, 20), goldMat);
+        wheelL.rotation.x = Math.PI / 2;
+        wheelL.position.set(-0.55, -0.35, 0.48);
+        const wheelR = wheelL.clone();
+        wheelR.position.set(0.55, -0.35, 0.48);
+        coreMesh = chassis;
+        satMesh = wheelL;
+        accentMesh = wheelR;
+        rootGroup.add(chassis, cabin, wheelL, wheelR);
+      } else if (type === "maintenance") {
+        // حلقة صيانة + نواة متماسكة + عنصر داعم
+        const ring = new THREE.Mesh(new THREE.TorusGeometry(1.2, 0.16, 16, 48), mainMat);
+        const hub = new THREE.Mesh(new THREE.OctahedronGeometry(0.62, 0), goldMat);
+        const bar = new THREE.Mesh(new THREE.BoxGeometry(2.3, 0.18, 0.18), subMat);
+        coreMesh = hub;
+        satMesh = ring;
+        accentMesh = bar;
+        rootGroup.add(ring, hub, bar);
       } else {
-        fallbackEl.style.display = "block";
+        // مجسم الختام والتوازن
+        const poly = new THREE.Mesh(new THREE.IcosahedronGeometry(1.05, 1), mainMat);
+        const ring1 = new THREE.Mesh(new THREE.TorusGeometry(1.65, 0.055, 16, 72), goldMat);
+        const ring2 = new THREE.Mesh(new THREE.TorusGeometry(1.95, 0.045, 16, 72), subMat);
+        ring2.rotation.y = Math.PI / 3;
+        coreMesh = poly;
+        satMesh = ring1;
+        accentMesh = ring2;
+        rootGroup.add(poly, ring1, ring2);
       }
     }
 
-    function loadVideoForSection(sectionKey, autoplay = true) {
-      const data = SECTIONS_DATA[sectionKey];
-      fallbackEl.style.display = "none";
-      currentCandidates = data.mediaCandidates || [data.video];
-      candidateIndex = 0;
-      shouldAutoplayCurrent = autoplay;
-      videoEl.pause();
-      tryNextCandidate();
-    }
+    function init3D() {
+      const box = document.getElementById("threeBox");
+      const w = box.clientWidth || 520;
+      const h = box.clientHeight || 320;
 
-    videoEl.addEventListener("error", () => {
-      if (videoEl.getAttribute("src") && !videoEl.getAttribute("src").startsWith("blob:")) {
-        tryNextCandidate();
-      }
-    });
+      scene = new THREE.Scene();
+      camera = new THREE.PerspectiveCamera(46, w / h, 0.1, 100);
+      camera.position.set(0, 0.35, 5.4);
 
-    document.getElementById("toggle-play-btn").addEventListener("click", () => {
-      if (videoEl.paused) {
-        videoEl.play().catch(() => {});
-      } else {
-        videoEl.pause();
-      }
-    });
-
-    document.getElementById("replay-btn").addEventListener("click", () => {
-      videoEl.currentTime = 0;
-      videoEl.play().catch(() => {});
-    });
-
-    document.getElementById("mute-btn").addEventListener("click", (e) => {
-      videoEl.muted = !videoEl.muted;
-      e.target.textContent = videoEl.muted ? "إلغاء الكتم" : "كتم الصوت";
-    });
-
-    document.getElementById("local-file-input").addEventListener("change", (e) => {
-      const file = e.target.files && e.target.files[0];
-      if (!file) return;
-      fallbackEl.style.display = "none";
-      const objectUrl = URL.createObjectURL(file);
-      videoNameEl.textContent = file.name + " (ملف محلي)";
-      videoEl.src = objectUrl;
-      videoEl.play().catch(() => {});
-    });
-
-    function renderAnalysisAndVerdict(sectionKey) {
-      const data = SECTIONS_DATA[sectionKey];
-      document.getElementById("scene-title").textContent = data.sceneTitle;
-      document.getElementById("charge-title").textContent = data.chargeTitle;
-      document.getElementById("charge-text").textContent = data.chargeText;
-      document.getElementById("physics-text").textContent = data.physicsText;
-      document.getElementById("formula-box").textContent = data.formula;
-
-      document.getElementById("metric-power").textContent = isWasteMode ? data.wastePower : data.consciousPower;
-      document.getElementById("metric-efficiency").textContent = isWasteMode ? data.wasteEff : data.consciousEff;
-      document.getElementById("scene-status-label").textContent =
-        "الحالة الحالية: " + (isWasteMode ? "الوضع المُهدر للطاقة" : "سلوك المواطن الواعي");
-
-      document.getElementById("verdict-question").textContent = data.verdictQ;
-      const optionsBox = document.getElementById("verdict-options");
-      const feedbackBox = document.getElementById("verdict-feedback");
-      optionsBox.innerHTML = "";
-      feedbackBox.style.display = "none";
-
-      data.options.forEach((opt) => {
-        const btn = document.createElement("button");
-        btn.className = "verdict-btn";
-        btn.textContent = opt.text;
-        btn.addEventListener("click", () => {
-          feedbackBox.style.display = "block";
-          feedbackBox.textContent = opt.msg;
-          feedbackBox.style.background = opt.correct ? "var(--ok-bg)" : "var(--danger-bg)";
-          feedbackBox.style.color = opt.correct ? "var(--ok)" : "var(--danger)";
-          if (opt.correct) {
-            answeredSections.add(sectionKey);
-            updateCitizenMeter();
-          }
-        });
-        optionsBox.appendChild(btn);
-      });
-    }
-
-    function setSection(sectionKey, autoplayVideo = true) {
-      currentSection = sectionKey;
-
-      document.querySelectorAll(".nav-tab").forEach((tab) => {
-        tab.classList.toggle("active", tab.dataset.section === sectionKey);
-      });
-
-      if (sectionKey === "summary") {
-        summarySection.classList.add("visible");
-      } else {
-        summarySection.classList.remove("visible");
-      }
-
-      buildThreeScene(sectionKey, isWasteMode);
-      renderAnalysisAndVerdict(sectionKey);
-      loadVideoForSection(sectionKey, autoplayVideo);
-    }
-
-    document.querySelectorAll(".nav-tab").forEach((tab) => {
-      tab.addEventListener("click", () => {
-        setSection(tab.dataset.section, true);
-      });
-    });
-
-    document.getElementById("waste-mode-btn").addEventListener("click", () => {
-      isWasteMode = true;
-      document.getElementById("waste-mode-btn").classList.add("active");
-      document.getElementById("conscious-mode-btn").classList.remove("active");
-      buildThreeScene(currentSection, isWasteMode);
-      renderAnalysisAndVerdict(currentSection);
-    });
-
-    document.getElementById("conscious-mode-btn").addEventListener("click", () => {
-      isWasteMode = false;
-      document.getElementById("conscious-mode-btn").classList.add("active");
-      document.getElementById("waste-mode-btn").classList.remove("active");
-      buildThreeScene(currentSection, isWasteMode);
-      renderAnalysisAndVerdict(currentSection);
-    });
-
-    startBtn.addEventListener("click", () => {
-      entryGate.style.display = "none";
-      setSection("intro", true);
-    });
-
-    const certInput = document.getElementById("cert-name-input");
-    const certDisplay = document.getElementById("cert-display-name");
-    certInput.addEventListener("input", () => {
-      const val = certInput.value.trim();
-      certDisplay.textContent = val || "الطالبة: مروة بكاوي — القسم: 2 رياضي";
-    });
-
-    const canvasWrapper = document.getElementById("canvas-wrapper");
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xf2efe9);
-
-    const camera = new THREE.PerspectiveCamera(
-      48,
-      canvasWrapper.clientWidth / canvasWrapper.clientHeight,
-      0.1,
-      100
-    );
-    camera.position.set(0, 2.2, 6.8);
-    camera.lookAt(0, 0.8, 0);
-
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(canvasWrapper.clientWidth, canvasWrapper.clientHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-    canvasWrapper.appendChild(renderer.domElement);
-
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.9);
-    scene.add(ambientLight);
-    const dirLight = new THREE.DirectionalLight(0xffffff, 0.9);
-    dirLight.position.set(4, 7, 5);
-    scene.add(dirLight);
-
-    const subjectGroup = new THREE.Group();
-    scene.add(subjectGroup);
-
-    let animatedObjects = [];
-    let heatParticles = null;
-
-    function clearSubjectGroup() {
-      animatedObjects = [];
-      heatParticles = null;
-      while (subjectGroup.children.length > 0) {
-        const child = subjectGroup.children[0];
-        subjectGroup.remove(child);
-      }
-    }
-
-    function createHeatParticles(count, colorHex, spreadX, spreadY, spreadZ) {
-      const geometry = new THREE.BufferGeometry();
-      const positions = new Float32Array(count * 3);
-      for (let i = 0; i < count; i++) {
-        positions[i * 3] = (Math.random() - 0.5) * spreadX;
-        positions[i * 3 + 1] = Math.random() * spreadY;
-        positions[i * 3 + 2] = (Math.random() - 0.5) * spreadZ;
-      }
-      geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-      const material = new THREE.PointsMaterial({
-        color: colorHex,
-        size: 0.14
-      });
-      const points = new THREE.Points(geometry, material);
-      subjectGroup.add(points);
-      return points;
-    }
-
-    function buildThreeScene(sectionKey, wasteMode) {
-      clearSubjectGroup();
-
-      const floor = new THREE.Mesh(
-        new THREE.CylinderGeometry(3.4, 3.6, 0.16, 36),
-        new THREE.MeshStandardMaterial({ color: 0xe3ddd2 })
-      );
-      floor.position.y = -0.7;
-      subjectGroup.add(floor);
-
-      if (sectionKey === "intro") {
-        const pillar = new THREE.Mesh(
-          new THREE.CylinderGeometry(0.14, 0.22, 2.8, 16),
-          new THREE.MeshStandardMaterial({ color: 0x222222 })
-        );
-        pillar.position.y = 0.7;
-        subjectGroup.add(pillar);
-
-        const beamGroup = new THREE.Group();
-        beamGroup.position.y = 2.0;
-        const beam = new THREE.Mesh(
-          new THREE.BoxGeometry(3.4, 0.12, 0.16),
-          new THREE.MeshStandardMaterial({ color: 0x111111 })
-        );
-        beamGroup.add(beam);
-
-        const leftPan = new THREE.Mesh(
-          new THREE.CylinderGeometry(0.75, 0.65, 0.12, 24),
-          new THREE.MeshStandardMaterial({ color: wasteMode ? 0xb91c1c : 0x525252 })
-        );
-        leftPan.position.set(-1.5, -0.55, 0);
-        beamGroup.add(leftPan);
-
-        const rightPan = new THREE.Mesh(
-          new THREE.CylinderGeometry(0.75, 0.65, 0.12, 24),
-          new THREE.MeshStandardMaterial({ color: wasteMode ? 0x525252 : 0x15803d })
-        );
-        rightPan.position.set(1.5, -0.55, 0);
-        beamGroup.add(rightPan);
-
-        beamGroup.rotation.z = wasteMode ? 0.18 : -0.18;
-        subjectGroup.add(beamGroup);
-        animatedObjects.push({ type: "sway", mesh: beamGroup, baseRot: beamGroup.rotation.z });
-      } else if (sectionKey === "case1") {
-        const wall = new THREE.Mesh(
-          new THREE.BoxGeometry(2.4, 2.4, 0.25),
-          new THREE.MeshStandardMaterial({ color: 0xd6d1c7 })
-        );
-        wall.position.set(0, 0.8, -0.7);
-        subjectGroup.add(wall);
-
-        const socket = new THREE.Mesh(
-          new THREE.BoxGeometry(0.9, 0.9, 0.15),
-          new THREE.MeshStandardMaterial({ color: 0xffffff })
-        );
-        socket.position.set(0, 0.8, -0.52);
-        subjectGroup.add(socket);
-
-        const charger = new THREE.Mesh(
-          new THREE.BoxGeometry(0.65, 0.65, 0.65),
-          new THREE.MeshStandardMaterial({ color: wasteMode ? 0x991b1b : 0x1f2937 })
-        );
-        charger.position.set(0, 0.8, wasteMode ? -0.15 : 0.75);
-        subjectGroup.add(charger);
-
-        if (wasteMode) {
-          heatParticles = createHeatParticles(45, 0xdc2626, 1.3, 1.4, 1.2);
-        }
-      } else if (sectionKey === "case2") {
-        const incBulb = new THREE.Mesh(
-          new THREE.SphereGeometry(0.65, 24, 24),
-          new THREE.MeshStandardMaterial({
-            color: wasteMode ? 0xef4444 : 0xfca5a5,
-            emissive: wasteMode ? 0x991b1b : 0x450a0a,
-            emissiveIntensity: wasteMode ? 0.7 : 0.2
-          })
-        );
-        incBulb.position.set(-1.3, 1.2, 0);
-        subjectGroup.add(incBulb);
-
-        const ledBulb = new THREE.Mesh(
-          new THREE.CylinderGeometry(0.45, 0.58, 1.0, 24),
-          new THREE.MeshStandardMaterial({
-            color: wasteMode ? 0xe5e7eb : 0xfef08a,
-            emissive: wasteMode ? 0x374151 : 0xeab308,
-            emissiveIntensity: wasteMode ? 0.2 : 0.85
-          })
-        );
-        ledBulb.position.set(1.3, 1.2, 0);
-        subjectGroup.add(ledBulb);
-
-        if (wasteMode) {
-          heatParticles = createHeatParticles(40, 0xdc2626, 1.2, 1.5, 1.2);
-        }
-      } else if (sectionKey === "case3") {
-        const houseBase = new THREE.Mesh(
-          new THREE.BoxGeometry(2.1, 1.5, 1.8),
-          new THREE.MeshStandardMaterial({ color: 0xf5f5f4 })
-        );
-        houseBase.position.y = 0.15;
-        subjectGroup.add(houseBase);
-
-        const roof = new THREE.Mesh(
-          new THREE.ConeGeometry(1.75, 1.15, 4),
-          new THREE.MeshStandardMaterial({ color: 0x334155 })
-        );
-        roof.position.y = 1.45;
-        roof.rotation.y = Math.PI / 4;
-        subjectGroup.add(roof);
-
-        if (!wasteMode) {
-          const insulationShell = new THREE.Mesh(
-            new THREE.BoxGeometry(2.35, 1.75, 2.05),
-            new THREE.MeshStandardMaterial({
-              color: 0x22c55e,
-              transparent: true,
-              opacity: 0.25
-            })
-          );
-          insulationShell.position.y = 0.15;
-          subjectGroup.add(insulationShell);
-        } else {
-          heatParticles = createHeatParticles(50, 0xef4444, 2.6, 1.8, 2.4);
-        }
-      } else if (sectionKey === "case4") {
-        const sun = new THREE.Mesh(
-          new THREE.SphereGeometry(0.6, 24, 24),
-          new THREE.MeshStandardMaterial({
-            color: 0xfacc15,
-            emissive: 0xeab308,
-            emissiveIntensity: 0.7
-          })
-        );
-        sun.position.set(1.9, 2.3, -0.5);
-        subjectGroup.add(sun);
-        animatedObjects.push({ type: "rotate", mesh: sun, speed: 0.015 });
-
-        const collector = new THREE.Mesh(
-          new THREE.BoxGeometry(1.9, 0.18, 1.2),
-          new THREE.MeshStandardMaterial({ color: 0x1e293b })
-        );
-        collector.position.set(-0.5, 0.6, 0);
-        collector.rotation.z = 0.45;
-        subjectGroup.add(collector);
-
-        const tank = new THREE.Mesh(
-          new THREE.CylinderGeometry(0.45, 0.45, 1.3, 20),
-          new THREE.MeshStandardMaterial({ color: wasteMode ? 0x94a3b8 : 0x0284c7 })
-        );
-        tank.position.set(-1.7, 0.05, -0.4);
-        subjectGroup.add(tank);
-      } else if (sectionKey === "case5") {
-        const carBody = new THREE.Mesh(
-          new THREE.BoxGeometry(2.2, 0.65, 1.15),
-          new THREE.MeshStandardMaterial({ color: wasteMode ? 0x991b1b : 0x166534 })
-        );
-        carBody.position.y = 0.0;
-        subjectGroup.add(carBody);
-
-        const carCabin = new THREE.Mesh(
-          new THREE.BoxGeometry(1.2, 0.55, 1.0),
-          new THREE.MeshStandardMaterial({ color: 0xe5e7eb })
-        );
-        carCabin.position.set(-0.15, 0.55, 0);
-        subjectGroup.add(carCabin);
-
-        if (wasteMode) {
-          heatParticles = createHeatParticles(45, 0x525252, 1.4, 1.3, 1.2);
-        }
-      } else if (sectionKey === "summary") {
-        const earth = new THREE.Mesh(
-          new THREE.SphereGeometry(1.05, 32, 32),
-          new THREE.MeshStandardMaterial({ color: 0x1d4ed8 })
-        );
-        earth.position.y = 1.0;
-        subjectGroup.add(earth);
-        animatedObjects.push({ type: "rotate", mesh: earth, speed: 0.012 });
-
-        const ring = new THREE.Mesh(
-          new THREE.TorusGeometry(1.55, 0.05, 16, 48),
-          new THREE.MeshStandardMaterial({ color: 0x15803d })
-        );
-        ring.position.y = 1.0;
-        ring.rotation.x = Math.PI / 2.6;
-        subjectGroup.add(ring);
-        animatedObjects.push({ type: "rotate", mesh: ring, speed: -0.01 });
-      }
-    }
-
-    let isDragging = false;
-    let prevX = 0;
-    let prevY = 0;
-
-    canvasWrapper.addEventListener("pointerdown", (e) => {
-      isDragging = true;
-      prevX = e.clientX;
-      prevY = e.clientY;
-    });
-
-    window.addEventListener("pointerup", () => {
-      isDragging = false;
-    });
-
-    window.addEventListener("pointermove", (e) => {
-      if (!isDragging) return;
-      const dx = e.clientX - prevX;
-      const dy = e.clientY - prevY;
-      subjectGroup.rotation.y += dx * 0.008;
-      subjectGroup.rotation.x = Math.max(-0.5, Math.min(0.6, subjectGroup.rotation.x + dy * 0.006));
-      prevX = e.clientX;
-      prevY = e.clientY;
-    });
-
-    window.addEventListener("resize", () => {
-      const w = canvasWrapper.clientWidth;
-      const h = canvasWrapper.clientHeight;
-      camera.aspect = w / h;
-      camera.updateProjectionMatrix();
+      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
       renderer.setSize(w, h);
-    });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
 
-    function animate() {
-      requestAnimationFrame(animate);
+      const old = box.querySelector("canvas");
+      if (old) old.remove();
+      box.insertBefore(renderer.domElement, box.firstChild);
 
-      const t = performance.now() * 0.002;
-      animatedObjects.forEach((item) => {
-        if (item.type === "rotate") {
-          item.mesh.rotation.y += item.speed;
-        } else if (item.type === "sway") {
-          item.mesh.rotation.z = item.baseRot + Math.sin(t) * 0.04;
-        }
+      scene.add(new THREE.AmbientLight(0xffffff, 0.95));
+      const d1 = new THREE.DirectionalLight(0xffffff, 1.1);
+      d1.position.set(4, 6, 5);
+      scene.add(d1);
+
+      const d2 = new THREE.DirectionalLight(0x38bdf8, 0.65);
+      d2.position.set(-5, -3, 4);
+      scene.add(d2);
+
+      rootGroup = new THREE.Group();
+      scene.add(rootGroup);
+
+      buildModelForType(PAGES[0].modelType, 0x2563eb, 0x10b981);
+
+      window.addEventListener("resize", () => {
+        if (!renderer || !camera) return;
+        const nw = box.clientWidth || 520;
+        const nh = box.clientHeight || 320;
+        camera.aspect = nw / nh;
+        camera.updateProjectionMatrix();
+        renderer.setSize(nw, nh);
       });
 
-      if (heatParticles) {
-        const posAttr = heatParticles.geometry.attributes.position;
-        for (let i = 0; i < posAttr.count; i++) {
-          let y = posAttr.getY(i) + 0.015;
-          if (y > 2.2) y = 0.1;
-          posAttr.setY(i, y);
-        }
-        posAttr.needsUpdate = true;
+      render3DLoop();
+    }
+
+    function render3DLoop() {
+      requestAnimationFrame(render3DLoop);
+      const t = performance.now() * 0.001;
+      const page = PAGES[index];
+
+      if (page.modelType === "cooler") {
+        if (satMesh) satMesh.rotation.z = t * 4.2;
+        if (accentMesh) accentMesh.rotation.z = t * 4.2 + Math.PI / 2;
+        if (coreMesh) coreMesh.rotation.y = Math.sin(t * 0.8) * 0.25;
+      } else if (page.modelType === "mobility") {
+        rootGroup.rotation.y = Math.sin(t * 0.9) * 0.45;
+        if (satMesh) satMesh.rotation.y = t * 3.5;
+        if (accentMesh) accentMesh.rotation.y = t * 3.5;
+      } else {
+        rootGroup.rotation.y = t * 0.65;
+        rootGroup.position.y = Math.sin(t * 1.8) * 0.08;
+        if (orbitMesh) orbitMesh.rotation.z = -t * 0.7;
       }
 
       renderer.render(scene, camera);
     }
 
-    setSection("intro", false);
-    animate();
+    // تشغيل الصوت فقط (بدون فيديو إطلاقاً)
+    function stopSound() {
+      if (activeAudio) {
+        activeAudio.pause();
+        activeAudio.currentTime = 0;
+        activeAudio = null;
+      }
+      if ("speechSynthesis" in window) {
+        window.speechSynthesis.cancel();
+      }
+      document.getElementById("audioBox").classList.remove("playing");
+      document.getElementById("audioInfo").textContent = "تم إيقاف الصوت — جاهز للتشغيل";
+    }
+
+    function speakFallback(text) {
+      const box = document.getElementById("audioBox");
+      const info = document.getElementById("audioInfo");
+      if (!("speechSynthesis" in window)) {
+        info.textContent = "النطق الصوتي غير متاح في هذا المتصفح؛ تأكدي من وجود ملف الصوت في المجلد.";
+        return;
+      }
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = "ar-SA";
+      utter.rate = 0.98;
+      utter.onstart = () => {
+        box.classList.add("playing");
+        info.textContent = "جاري تشغيل السرد الصوتي...";
+      };
+      utter.onend = () => {
+        box.classList.remove("playing");
+        info.textContent = "انتهى السرد الصوتي";
+      };
+      utter.onerror = () => {
+        box.classList.remove("playing");
+        info.textContent = "تعذر تشغيل السرد الصوتي";
+      };
+      window.speechSynthesis.speak(utter);
+    }
+
+    function playPageSound(page) {
+      stopSound();
+      const box = document.getElementById("audioBox");
+      const info = document.getElementById("audioInfo");
+
+      const snd = new Audio(page.audioFile);
+      activeAudio = snd;
+      snd.onplay = () => {
+        box.classList.add("playing");
+        info.textContent = `جاري تشغيل الصوت (${page.audioFile})...`;
+      };
+      snd.onended = () => {
+        box.classList.remove("playing");
+        info.textContent = "اكتمل تشغيل الصوت";
+      };
+      snd.onerror = () => {
+        activeAudio = null;
+        speakFallback(page.fallbackAudio);
+      };
+      snd.play().catch(() => {
+        activeAudio = null;
+        speakFallback(page.fallbackAudio);
+      });
+    }
+
+    function renderTabs() {
+      const nav = document.getElementById("navTabs");
+      nav.innerHTML = "";
+      PAGES.forEach((p, idx) => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "tab-btn" + (p.id === "summary" ? " summary-tab" : "") + (idx === index ? " active" : "");
+        b.textContent = p.tab;
+        b.onclick = () => goTo(idx);
+        nav.appendChild(b);
+      });
+    }
+
+    function renderPage() {
+      stopSound();
+      renderTabs();
+
+      const p = PAGES[index];
+      document.getElementById("stepTag").textContent = p.badge;
+      document.getElementById("domainTag").textContent = p.domain;
+      document.getElementById("claimText").textContent = p.claim;
+      document.getElementById("audioLabel").textContent = `السرد الصوتي — ${p.tab}`;
+      document.getElementById("modelBadge").textContent = p.modelBadge;
+      document.getElementById("threeNote").textContent = p.modelNote;
+      document.getElementById("storyText").textContent = p.story;
+
+      // الميزان والمؤشر
+      document.getElementById("beamGroup").style.transform = `rotate(${p.tilt}deg)`;
+      document.getElementById("gaugeDot").style.left = `${p.score}%`;
+      document.getElementById("scoreNum").textContent = p.score;
+
+      const chip = document.getElementById("scoreChip");
+      if (p.score >= 70) {
+        chip.textContent = "مواطنة طاقية عالية";
+        chip.style.background = "#d1fae5";
+        chip.style.color = "#065f46";
+      } else if (p.score >= 50) {
+        chip.textContent = "توازن جيد";
+        chip.style.background = "#fef3c7";
+        chip.style.color = "#92400e";
+      } else {
+        chip.textContent = "تحتاج لرفع الكفاءة";
+        chip.style.background = "#ffe4e6";
+        chip.style.color = "#9f1239";
+      }
+
+      // بطاقات القوانين
+      const lawsGrid = document.getElementById("lawsGrid");
+      lawsGrid.innerHTML = "";
+      p.laws.forEach((l) => {
+        const div = document.createElement("div");
+        div.className = "law-card";
+        div.innerHTML = `
+          <span class="formula-badge ${l.c}">${l.f}</span>
+          <div style="font-weight: 800; margin-bottom: 5px;">${l.t}</div>
+          <p style="font-size: 0.9rem; color: var(--muted); line-height: 1.65;">${l.d}</p>
+        `;
+        lawsGrid.appendChild(div);
+      });
+
+      // السؤال التفاعلي
+      document.getElementById("qaQuestion").textContent = p.qa.q;
+      const choices = document.getElementById("qaChoices");
+      const msg = document.getElementById("qaMsg");
+      choices.innerHTML = "";
+      msg.className = "qa-msg";
+      msg.textContent = "";
+
+      p.qa.options.forEach((opt, i) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "choice-btn";
+        btn.textContent = opt;
+        btn.onclick = () => {
+          choices.querySelectorAll("button").forEach((el) => el.classList.remove("ok", "no"));
+          if (i === p.qa.ans) {
+            btn.classList.add("ok");
+            msg.textContent = p.qa.ok;
+            msg.style.background = "#d1fae5";
+            msg.style.color = "#065f46";
+          } else {
+            btn.classList.add("no");
+            msg.textContent = p.qa.no;
+            msg.style.background = "#ffe4e6";
+            msg.style.color = "#9f1239";
+          }
+          msg.classList.add("show");
+        };
+        choices.appendChild(btn);
+      });
+
+      // أزرار السابق / التالي
+      document.getElementById("prevBtn").disabled = index === 0;
+      document.getElementById("nextBtn").textContent = index === PAGES.length - 1 ? "العودة للقضية 1 ↺" : "التالي ←";
+
+      // تحديث المجسم 3D
+      const palette = [
+        [0x2563eb, 0x10b981],
+        [0x059669, 0x8b5cf6],
+        [0x7c3aed, 0x06b6d4],
+        [0xd97706, 0x10b981],
+        [0xe11d48, 0x2563eb],
+        [0x7c3aed, 0x10b981]
+      ];
+      const [colA, colB] = palette[index] || [0x2563eb, 0x10b981];
+      buildModelForType(p.modelType, colA, colB);
+    }
+
+    function goTo(newIdx) {
+      index = Math.max(0, Math.min(PAGES.length - 1, newIdx));
+      renderPage();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    document.getElementById("playSoundBtn").onclick = () => playPageSound(PAGES[index]);
+    document.getElementById("stopSoundBtn").onclick = stopSound;
+    document.getElementById("prevBtn").onclick = () => goTo(index - 1);
+    document.getElementById("nextBtn").onclick = () => {
+      if (index === PAGES.length - 1) goTo(0);
+      else goTo(index + 1);
+    };
+
+    init3D();
+    renderPage();
   </script>
 </body>
 </html>
