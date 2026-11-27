@@ -164,7 +164,6 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* بانر المقدمة الترحيبية */
     .intro-banner {
       background: linear-gradient(135deg, #eff6ff 0%, #f0fdf4 52%, #fefce8 100%);
       border: 2px solid rgba(37, 99, 235, 0.18);
@@ -229,7 +228,7 @@
       line-height: 1.75;
     }
 
-    /* مشغل الصوت فقط — بدون فيديو نهائياً */
+    /* مشغل صوت فقط — بدون فيديو مرئي نهائياً */
     .sound-panel {
       background: linear-gradient(125deg, #0f172a, #1e293b, #1d4ed8);
       color: #fff;
@@ -327,7 +326,6 @@
       border: 1px solid rgba(255, 255, 255, 0.24);
     }
 
-    /* شبكة 3D والميزان */
     .grid-2 {
       display: grid;
       grid-template-columns: 1.35fr 0.95fr;
@@ -589,6 +587,9 @@
   </style>
 </head>
 <body>
+  <!-- مشغل صوت مخفي تماماً (بدون أي فيديو مرئي في الصفحة) -->
+  <audio id="hiddenSoundEngine" preload="metadata" style="display:none;"></audio>
+
   <header class="topbar">
     <div class="topbar-inner">
       <div class="brand">
@@ -603,24 +604,22 @@
   </header>
 
   <main class="container">
-    <!-- مقدمة ترحيبية واضحة مع اسم مروة بكاوي -->
     <section class="card" id="introSection">
       <div class="intro-banner">
         <div class="intro-credit">✨ مشروع محكمة الطاقة 3D — إعداد: مروة بكاوي</div>
         <div class="intro-heading">مرحباً بكم في محكمة الطاقة والمواطنة</div>
         <p style="color: #334155; font-weight: 700; line-height: 1.75;">
-          منصة تفاعلية باللغة العربية تناقش قضايا الطاقة والمواطنة عبر سرد صوتي مباشر، مجسمات ثلاثية الأبعاد قابلة للتحريك باليد أو الماوس، ميزان للمواطنة الطاقية، وأسئلة تفاعلية.
+          منصة تفاعلية باللغة العربية تناقش قضايا الطاقة والمواطنة عبر سرد صوتي مخصص لكل قسم، مجسمات ثلاثية الأبعاد قابلة للتحريك باليد أو الماوس، ميزان للمواطنة الطاقية، وأسئلة تفاعلية.
         </p>
       </div>
 
       <div class="row-top">
         <span class="badge-main" id="stepBadge">المقدمة</span>
-        <span class="badge-sub" id="domainBadge">الطالبة: مروة بكاوي</span>
+        <span class="badge-sub" id="domainBadge">إعداد: مروة بكاوي</span>
       </div>
 
       <div class="claim-box" id="claimBox"></div>
 
-      <!-- أزرار الصوت فقط — بدون فيديو إطلاقاً -->
       <div class="sound-panel" id="soundPanel">
         <div class="sound-left">
           <div class="bars" aria-hidden="true">
@@ -628,7 +627,7 @@
           </div>
           <div>
             <div style="font-weight: 800; font-size: 0.98rem;" id="soundTitle">السرد الصوتي — المقدمة</div>
-            <div style="font-size: 0.82rem; color: #cbd5e1;" id="soundStatus">اضغطي «صوت المقدمة» أو «صوت القسم» للاستماع مباشرة (بدون فيديو)</div>
+            <div style="font-size: 0.82rem; color: #cbd5e1;" id="soundStatus">جاهز لتشغيل الصوت الخاص بكل قسم (بدون فيديو)</div>
           </div>
         </div>
         <div class="sound-btns">
@@ -639,12 +638,11 @@
       </div>
     </section>
 
-    <!-- المجسم ثلاثي الأبعاد القابل للتحريك باليد + ميزان المواطنة -->
     <section class="grid-2">
       <div class="card" style="padding: 20px;">
         <div class="row-top">
           <div style="font-weight: 900; font-size: 1.02rem;">🧊 مجسم ثلاثي الأبعاد تفاعلي</div>
-          <span class="badge-sub" id="modelName">مجسم المقدمة والمحكمة</span>
+          <span class="badge-sub" id="modelName">مجسم المحكمة والميزان</span>
         </div>
 
         <div class="stage-toolbar">
@@ -708,7 +706,6 @@
       </div>
     </section>
 
-    <!-- السرد المرئي + القوانين + سؤال تفاعلي + أزرار السابق / التالي -->
     <section class="card">
       <div style="font-weight: 900; font-size: 1.04rem;">📖 السرد المرئي والتحليل الفيزيائي</div>
       <div class="story-box" id="storyBox"></div>
@@ -731,8 +728,9 @@
   </main>
 
   <script>
-    const INTRO_AUDIO_TEXT =
-      "أهلاً بكم في مشروع محكمة الطاقة ثلاثية الأبعاد، الطاقة والمواطنة، من إعداد الطالبة مروة بكاوي. نستعرض هنا قضايا واقعية حول استهلاك الطاقة وكفاءتها ومواطنتنا اليومية بأسلوب تفاعلي وصوتي ومجسمات ثلاثية الأبعاد.";
+    const INTRO_AUDIO_CANDIDATES = ["intro.m4a", "intro%20mp3", "intro mp3"];
+    const INTRO_VOICE_TEXT =
+      "مقدمة مشروع محكمة الطاقة ثلاثية الأبعاد، الطاقة والمواطنة، من إعداد الطالبة مروة بكاوي.";
 
     const SECTIONS = [
       {
@@ -741,8 +739,8 @@
         badge: "المقدمة والافتتاح",
         domain: "إعداد: مروة بكاوي",
         claim: "المقدمة: «كيف نحوّل فهمنا الفيزيائي للطاقة إلى سلوك يومي مسؤول ومواطنة حقيقية؟» — إعداد الطالبة: مروة بكاوي.",
-        audioFile: "intro.m4a",
-        voiceText: INTRO_AUDIO_TEXT,
+        audioFiles: ["intro.m4a", "intro%20mp3"],
+        voiceText: INTRO_VOICE_TEXT,
         score: 50,
         tilt: 0,
         modelType: "court",
@@ -773,9 +771,9 @@
         badge: "القضية 1 من 5",
         domain: "القدرة والطاقة المستهلكة",
         claim: "دفاع المتهم: «الشاحن لا يستهلك شيئاً إذا لم يكن الهاتف موصولاً به» — فهل هذا صحيح فيزيائياً؟",
-        audioFile: "case1.mp3",
+        audioFiles: ["case1.mp4"],
         voiceText:
-          "القضية الأولى من إعداد مروة بكاوي: يدّعي المتهم أن الشاحن لا يستهلك طاقة عندما لا يكون الهاتف موصولاً به. فيزيائياً، يبقى الشاحن متصلاً بالمنبع الكهربائي وتستمر قدرته الصغيرة مع الزمن فتتحول إلى طاقة مستهلكة ضائعة.",
+          "القضية الأولى من إعداد مروة بكاوي: بقاء الشاحن موصولاً بالمقبس يسبب استهلاكاً يتراكم مع الزمن حتى لو لم يكن الهاتف متصلاً به.",
         score: 35,
         tilt: 14,
         modelType: "charger",
@@ -806,9 +804,9 @@
         badge: "القضية 2 من 5",
         domain: "الإنارة والكفاءة",
         claim: "ادعاء المتهم: «مصباح واحد منخفض القدرة لا يؤثر إن تُرك مضاءً في غرفة فارغة طوال الليل».",
-        audioFile: "case2.mp3",
+        audioFiles: ["case2.mp4"],
         voiceText:
-          "القضية الثانية: يبرر المتهم ترك المصباح مضاءً في غرفة فارغة طوال الليل. إطفاء الإنارة عند مغادرة المكان واختيار المصابيح عالية الكفاءة يقللان الهدر ويعكسان مواطنة طاقية مسؤولة.",
+          "القضية الثانية: إطفاء الإنارة عند مغادرة الغرفة واختيار المصابيح عالية الكفاءة يقللان الهدر ويعكسان مواطنة طاقية مسؤولة.",
         score: 45,
         tilt: 9,
         modelType: "bulb",
@@ -839,9 +837,9 @@
         badge: "القضية 3 من 5",
         domain: "التحولات الحرارية",
         claim: "مرافعة المتهم: «ضبط التبريد على درجة منخفضة جداً يبرّد الغرفة بسرعة دون كلفة إضافية كبيرة».",
-        audioFile: "case3.mp3",
+        audioFiles: ["case3.mp4"],
         voiceText:
-          "القضية الثالثة: يظن المتهم أن خفض درجة التبريد كثيراً لا يرتب كلفة إضافية معتبرة. كلما زاد الفارق الحراري وزاد تسرب الهواء، زاد عمل التبريد واستهلاك الطاقة.",
+          "القضية الثالثة: كلما زاد الفارق الحراري وزاد تسرب الهواء، زاد عمل التبريد واستهلاك الطاقة.",
         score: 40,
         tilt: 11,
         modelType: "cooler",
@@ -872,9 +870,9 @@
         badge: "القضية 4 من 5",
         domain: "النقل والمواطنة",
         claim: "حجة المتهم: «الاعتماد الدائم على السيارة في كل مشوار قصير أمر فردي ولا يخص المصلحة العامة».",
-        audioFile: "case4.mp3",
+        audioFiles: ["case4.mp4"],
         voiceText:
-          "القضية الرابعة: يرى المتهم أن التنقل الفردي شأن خاص فقط. غير أن اختيارات التنقل تؤثر على استهلاك الطاقة والبيئة، والمواطنة تعني الجمع بين الحركة الهادئة والبدائل المستدامة.",
+          "القضية الرابعة: اختيارات التنقل تؤثر على استهلاك الطاقة والبيئة، والمواطنة تعني الجمع بين الحركة الهادئة والبدائل المستدامة.",
         score: 58,
         tilt: -7,
         modelType: "mobility",
@@ -905,9 +903,9 @@
         badge: "القضية 5 من 5",
         domain: "الكفاءة والصيانة",
         claim: "قول المتهم: «الصيانة الدورية وتنظيف الأجهزة لا يغيّران شيئاً ما دامت الأجهزة تعمل».",
-        audioFile: "case5.mp3",
+        audioFiles: ["case5.mp4"],
         voiceText:
-          "القضية الخامسة: يقلل المتهم من أهمية الصيانة ما دام الجهاز يعمل. الصيانة الوقائية تحافظ على الكفاءة، تقلل الفواقد، وتطيل عمر الأجهزة.",
+          "القضية الخامسة: الصيانة الوقائية تحافظ على الكفاءة، تقلل الفواقد، وتطيل عمر الأجهزة.",
         score: 68,
         tilt: -11,
         modelType: "maintenance",
@@ -938,9 +936,9 @@
         badge: "الخلاصة الختامية",
         domain: "إعداد: مروة بكاوي",
         claim: "حكم المحكمة: المواطنة الطاقية وعي فيزيائي وسلوك يومي مسؤول يوازن بين حاجتنا للطاقة واستدامتها للأجيال القادمة — إعداد: مروة بكاوي.",
-        audioFile: "summary.mp3",
+        audioFiles: ["summary.mp4"],
         voiceText:
-          "الملخص الختامي لمحكمة الطاقة من إعداد الطالبة مروة بكاوي: الوعي الفيزيائي مع السلوك المسؤول يصنعان التوازن الحقيقي بين حاجتنا للطاقة واستدامة الموارد للأجيال القادمة.",
+          "الملخص الختامي لمحكمة الطاقة من إعداد الطالبة مروة بكاوي: الوعي الفيزيائي مع السلوك المسؤول يصنعان التوازن الحقيقي.",
         score: 88,
         tilt: -16,
         modelType: "summary",
@@ -968,16 +966,12 @@
     ];
 
     let idx = 0;
-    let audioObj = null;
     let autoSpin = true;
+    const audioEl = document.getElementById("hiddenSoundEngine");
 
-    // مشهد Three.js مع تحريك كامل بالماوس واللمس بالإصبع
     let scene, camera, renderer, rootGroup, spinPartA, spinPartB;
     let isDragging = false;
-    let prevX = 0;
-    let prevY = 0;
-    let velX = 0;
-    let velY = 0;
+    let prevX = 0, prevY = 0, velX = 0, velY = 0;
     let zoomDist = 5.4;
 
     function build3DModel(type, c1, c2) {
@@ -1054,29 +1048,21 @@
         const dy = e.clientY - prevY;
         prevX = e.clientX;
         prevY = e.clientY;
-
         velY = dx * 0.012;
         velX = dy * 0.012;
-
         rootGroup.rotation.y += velY;
         rootGroup.rotation.x += velX;
       });
 
-      const endDrag = () => {
-        isDragging = false;
-      };
+      const endDrag = () => { isDragging = false; };
       el.addEventListener("pointerup", endDrag);
       el.addEventListener("pointercancel", endDrag);
 
-      el.addEventListener(
-        "wheel",
-        (e) => {
-          e.preventDefault();
-          zoomDist = Math.max(3.0, Math.min(9.5, zoomDist + e.deltaY * 0.003));
-          camera.position.z = zoomDist;
-        },
-        { passive: false }
-      );
+      el.addEventListener("wheel", (e) => {
+        e.preventDefault();
+        zoomDist = Math.max(3.0, Math.min(9.5, zoomDist + e.deltaY * 0.003));
+        camera.position.z = zoomDist;
+      }, { passive: false });
     }
 
     function init3D() {
@@ -1132,9 +1118,7 @@
         rootGroup.rotation.x += velX;
         velY *= 0.92;
         velX *= 0.92;
-        if (autoSpin) {
-          rootGroup.rotation.y += 0.007;
-        }
+        if (autoSpin) rootGroup.rotation.y += 0.007;
       }
 
       if (sec.modelType === "cooler") {
@@ -1150,44 +1134,32 @@
       renderer.render(scene, camera);
     }
 
-    // تشغيل الصوت مباشرة (ملف صوتي أو نطق عربي فوري بدون توقف)
+    // تشغيل صوت كل قسم من ملفه الخاص فقط (بدون تكرار صوت غيره)
     function stopVoice() {
-      if (audioObj) {
-        audioObj.pause();
-        audioObj.currentTime = 0;
-        audioObj = null;
-      }
+      audioEl.pause();
+      audioEl.currentTime = 0;
+      audioEl.removeAttribute("src");
       if ("speechSynthesis" in window) {
         window.speechSynthesis.cancel();
       }
       document.getElementById("soundPanel").classList.remove("playing");
-      document.getElementById("soundStatus").textContent = "تم إيقاف الصوت — جاهز للتشغيل";
+      document.getElementById("soundStatus").textContent = "تم إيقاف الصوت";
     }
 
-    function pickArabicVoice() {
-      if (!("speechSynthesis" in window)) return null;
-      const voices = window.speechSynthesis.getVoices() || [];
-      return voices.find((v) => v.lang && v.lang.toLowerCase().startsWith("ar")) || null;
-    }
-
-    function speakNow(text, label) {
+    function speakSectionOnly(text, label) {
       const panel = document.getElementById("soundPanel");
       const status = document.getElementById("soundStatus");
       if (!("speechSynthesis" in window)) {
-        status.textContent = "المتصفح لا يدعم النطق الصوتي؛ تأكدي من رفع ملف الصوت بجانب index.html.";
+        status.textContent = "تعذر تشغيل الصوت في المتصفح";
         return;
       }
       window.speechSynthesis.cancel();
       const utter = new SpeechSynthesisUtterance(text);
       utter.lang = "ar-SA";
-      const arVoice = pickArabicVoice();
-      if (arVoice) utter.voice = arVoice;
-      utter.rate = 0.96;
-      utter.pitch = 1.0;
-
+      utter.rate = 0.98;
       utter.onstart = () => {
         panel.classList.add("playing");
-        status.textContent = `جاري تشغيل الصوت: ${label}`;
+        status.textContent = `جاري النطق الصوتي الخاص بـ: ${label}`;
       };
       utter.onend = () => {
         panel.classList.remove("playing");
@@ -1195,39 +1167,37 @@
       };
       utter.onerror = () => {
         panel.classList.remove("playing");
-        status.textContent = "تعذر تشغيل النطق الصوتي في هذا المتصفح";
+        status.textContent = "تعذر تشغيل النطق الصوتي";
       };
-
       window.speechSynthesis.speak(utter);
     }
 
-    function playVoice(fileName, fallbackText, label) {
-      stopVoice();
+    function tryPlayCandidates(candidates, cIdx, fallbackText, label) {
       const panel = document.getElementById("soundPanel");
       const status = document.getElementById("soundStatus");
 
-      // إذا لم يجد ملف الصوت أو تعذر تشغيله، يشغّل السرد الصوتي مباشرة
-      const snd = new Audio(fileName);
-      audioObj = snd;
-      let startedFile = false;
+      if (cIdx >= candidates.length) {
+        speakSectionOnly(fallbackText, label);
+        return;
+      }
 
-      snd.onplay = () => {
-        startedFile = true;
+      const file = candidates[cIdx];
+      audioEl.onerror = () => {
+        tryPlayCandidates(candidates, cIdx + 1, fallbackText, label);
+      };
+      audioEl.onplay = () => {
         panel.classList.add("playing");
-        status.textContent = `جاري تشغيل ملف الصوت (${fileName}) — ${label}`;
+        status.textContent = `جاري تشغيل ملف الصوت (${decodeURIComponent(file)}) — ${label}`;
       };
-      snd.onended = () => {
+      audioEl.onended = () => {
         panel.classList.remove("playing");
-        status.textContent = "اكتمل تشغيل الصوت";
-      };
-      snd.onerror = () => {
-        audioObj = null;
-        if (!startedFile) speakNow(fallbackText, label);
+        status.textContent = `انتهى تشغيل (${decodeURIComponent(file)})`;
       };
 
-      snd.play().catch(() => {
-        audioObj = null;
-        speakNow(fallbackText, label);
+      audioEl.src = file;
+      audioEl.load();
+      audioEl.play().catch(() => {
+        tryPlayCandidates(candidates, cIdx + 1, fallbackText, label);
       });
     }
 
@@ -1348,12 +1318,16 @@
     }
 
     document.getElementById("btnIntroVoice").onclick = () => {
-      playVoice("intro.m4a", INTRO_AUDIO_TEXT, "مقدمة مروة بكاوي");
+      stopVoice();
+      tryPlayCandidates(INTRO_AUDIO_CANDIDATES, 0, INTRO_VOICE_TEXT, "المقدمة");
     };
+
     document.getElementById("btnSectionVoice").onclick = () => {
+      stopVoice();
       const s = SECTIONS[idx];
-      playVoice(s.audioFile, s.voiceText, s.pill);
+      tryPlayCandidates(s.audioFiles, 0, s.voiceText, s.pill);
     };
+
     document.getElementById("btnStopVoice").onclick = stopVoice;
 
     document.getElementById("prevPageBtn").onclick = () => goToPage(idx - 1);
@@ -1374,10 +1348,6 @@
       velX = 0;
       velY = 0;
     };
-
-    if ("speechSynthesis" in window) {
-      window.speechSynthesis.onvoiceschanged = () => pickArabicVoice();
-    }
 
     init3D();
     renderSection();
