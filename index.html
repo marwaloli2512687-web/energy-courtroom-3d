@@ -228,7 +228,6 @@
       line-height: 1.75;
     }
 
-    /* مشغل صوت فقط — بدون فيديو مرئي نهائياً */
     .sound-panel {
       background: linear-gradient(125deg, #0f172a, #1e293b, #1d4ed8);
       color: #fff;
@@ -341,7 +340,7 @@
     .stage-3d {
       position: relative;
       width: 100%;
-      height: 340px;
+      height: 350px;
       border-radius: 20px;
       overflow: hidden;
       background: linear-gradient(180deg, #dbeafe 0%, #f3e8ff 54%, #dcfce7 100%);
@@ -587,7 +586,6 @@
   </style>
 </head>
 <body>
-  <!-- مشغل صوت مخفي تماماً (بدون أي فيديو مرئي في الصفحة) -->
   <audio id="hiddenSoundEngine" preload="metadata" style="display:none;"></audio>
 
   <header class="topbar">
@@ -609,7 +607,7 @@
         <div class="intro-credit">✨ مشروع محكمة الطاقة 3D — إعداد: مروة بكاوي</div>
         <div class="intro-heading">مرحباً بكم في محكمة الطاقة والمواطنة</div>
         <p style="color: #334155; font-weight: 700; line-height: 1.75;">
-          منصة تفاعلية باللغة العربية تناقش قضايا الطاقة والمواطنة عبر سرد صوتي مخصص لكل قسم، مجسمات ثلاثية الأبعاد قابلة للتحريك باليد أو الماوس، ميزان للمواطنة الطاقية، وأسئلة تفاعلية.
+          منصة تفاعلية باللغة العربية تناقش قضايا الطاقة والمواطنة عبر سرد صوتي مخصص لكل قسم، مجسمات ثلاثية الأبعاد أقرب لواقع كل قضية وقابلة للتحريك باليد أو الماوس، ميزان للمواطنة الطاقية، وأسئلة تفاعلية.
         </p>
       </div>
 
@@ -641,8 +639,8 @@
     <section class="grid-2">
       <div class="card" style="padding: 20px;">
         <div class="row-top">
-          <div style="font-weight: 900; font-size: 1.02rem;">🧊 مجسم ثلاثي الأبعاد تفاعلي</div>
-          <span class="badge-sub" id="modelName">مجسم المحكمة والميزان</span>
+          <div style="font-weight: 900; font-size: 1.02rem;">🧊 مجسم ثلاثي الأبعاد للقضية</div>
+          <span class="badge-sub" id="modelName">ميزان المحكمة</span>
         </div>
 
         <div class="stage-toolbar">
@@ -744,8 +742,8 @@
         score: 50,
         tilt: 0,
         modelType: "court",
-        modelName: "مجسم المحكمة والميزان",
-        modelNote: "مجسم المحكمة والمدار — اسحبي بالماوس أو الإصبع لتحريكه في كل الاتجاهات",
+        modelName: "ميزان المحكمة ثلاثي الأبعاد",
+        modelNote: "مجسم ميزان المحكمة — اسحبي لتدويره ومعاينة كفتيه من كل الزوايا",
         story:
           "في هذا المشروع الذي أعدّته الطالبة مروة بكاوي، نفتح ملفات محكمة الطاقة لنناقش خمس قضايا حياتية ثم نصل إلى الملخص الختامي. الهدف هو الربط بين القوانين الفيزيائية للقدرة والطاقة والمردود وبين السلوك الواعي في حياتنا اليومية.",
         laws: [
@@ -777,8 +775,8 @@
         score: 35,
         tilt: 14,
         modelType: "charger",
-        modelName: "مجسم الشاحن والمقبس",
-        modelNote: "جسم الشاحن وحلقة التدفق — اسحبي لتحريك المجسم ومراقبة تفاصيله",
+        modelName: "شاحن جداري وكابل الطاقة",
+        modelNote: "مجسم شاحن بسنّي المقبس وكابل متصل — اسحبي لتحريكه بيدك",
         story:
           "حتى من دون هاتف، يبقى محوّل الشاحن متصلاً بالمنبع الكهربائي. القدرة اللحظية قد تبدو صغيرة، لكن استمرارها ساعات وأياماً يرفع الطاقة المستهلكة E = P × t دون تحقيق فائدة فعلية.",
         laws: [
@@ -810,8 +808,8 @@
         score: 45,
         tilt: 9,
         modelType: "bulb",
-        modelName: "مجسم المصباح والهالة",
-        modelNote: "المصباح والهالة المدارية — اسحبي باليد لتدويره واستكشافه",
+        modelName: "مصباح إنارة بقاعدة وفتيل",
+        modelNote: "مجسم مصباح كهربائي بقاعدة وفتيل متوهج — اسحبي لتدويره",
         story:
           "إطالة زمن تشغيل الإنارة في مكان غير مستخدم يرفع الاستهلاك التراكمي. المواطنة الطاقية تعني إطفاء الضوء عند الخروج واستخدام مصابيح موفرة عالية الكفاءة.",
         laws: [
@@ -843,8 +841,8 @@
         score: 40,
         tilt: 11,
         modelType: "cooler",
-        modelName: "مجسم المروحة والتبريد",
-        modelNote: "الشفرات الدوارة والإطار — اسحبي لتحريك المجسم أو كبّري بعجلة الماوس",
+        modelName: "وحدة تبريد ومروحة هواء",
+        modelNote: "مجسم وحدة تبريد بشفرات دوارة — اسحبي لتحريكه أو كبّري بعجلة الماوس",
         story:
           "زيادة الفارق الحراري بين الداخل والخارج تجبر نظام التبريد على العمل لفترات أطول وبجهد أكبر. الضبط المعتدل مع غلق النوافذ يوازن بين الراحة والاقتصاد في الطاقة.",
         laws: [
@@ -876,8 +874,8 @@
         score: 58,
         tilt: -7,
         modelType: "mobility",
-        modelName: "مجسم المركبة والحركة",
-        modelNote: "هيكل المركبة والعجلات — اسحبي لتدوير المجسم ومشاهدته من أي زاوية",
+        modelName: "مركبة بأربع عجلات ومصابيح",
+        modelNote: "مجسم مركبة بأربع عجلات متحركة — اسحبي لتدويرها من كل الجهات",
         story:
           "التنقل يرتبط بالطاقة والبيئة والازدحام. المشي في المسافات القصيرة، واستخدام النقل المشترك، والقيادة المتزنة تجعل التنقل أكثر مواطنة واستدامة.",
         laws: [
@@ -909,8 +907,8 @@
         score: 68,
         tilt: -11,
         modelType: "maintenance",
-        modelName: "مجسم الصيانة والتوازن",
-        modelNote: "البنية المتماسكة وحلقة الصيانة — اسحبي لتحريك المجسم بيدك",
+        modelName: "ترس ميكانيكي مسنّن للصيانة",
+        modelNote: "مجسم ترس مسنّن يدور بانتظام — اسحبي لتحريكه وفحص أسنانه",
         story:
           "إهمال الصيانة يزيد الفواقد ويضعف الأداء مع الزمن. العناية المنتظمة تحفظ الكفاءة التشغيلية وتمنع الأعطال المفاجئة وتطيل عمر التجهيزات.",
         laws: [
@@ -942,8 +940,8 @@
         score: 88,
         tilt: -16,
         modelType: "summary",
-        modelName: "مجسم التوازن والختام",
-        modelNote: "مجسم التوازن الختامي — اسحبي لتدويره بحرية",
+        modelName: "ميزان المواطنة المتوازن",
+        modelNote: "مجسم ميزان التوازن الختامي — اسحبي لتدويره بحرية",
         story:
           "تجمع محكمة الطاقة بين الفهم الفيزيائي لقوانين القدرة والطاقة والمردود، وبين السلوك المسؤول في المنزل والتنقل والصيانة، لبناء وعي طاقي مستدام.",
         laws: [
@@ -969,66 +967,232 @@
     let autoSpin = true;
     const audioEl = document.getElementById("hiddenSoundEngine");
 
-    let scene, camera, renderer, rootGroup, spinPartA, spinPartB;
+    let scene, camera, renderer, rootGroup;
+    let wheelsList = [];
+    let fanGroup = null;
+    let gearGroup = null;
     let isDragging = false;
     let prevX = 0, prevY = 0, velX = 0, velY = 0;
-    let zoomDist = 5.4;
+    let zoomDist = 5.6;
 
-    function build3DModel(type, c1, c2) {
+    function addBalanceScale(parent, tiltAngle, colLeft, colRight) {
+      const matBase = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.35, metalness: 0.5 });
+      const matPost = new THREE.MeshStandardMaterial({ color: 0x2563eb, roughness: 0.25, metalness: 0.55 });
+      const matGold = new THREE.MeshStandardMaterial({ color: 0xf59e0b, roughness: 0.25, metalness: 0.6 });
+      const matPanL = new THREE.MeshStandardMaterial({ color: colLeft, roughness: 0.3, metalness: 0.25 });
+      const matPanR = new THREE.MeshStandardMaterial({ color: colRight, roughness: 0.3, metalness: 0.25 });
+      const matChain = new THREE.MeshStandardMaterial({ color: 0x64748b, roughness: 0.4, metalness: 0.6 });
+
+      const base = new THREE.Mesh(new THREE.CylinderGeometry(0.95, 1.1, 0.22, 28), matBase);
+      base.position.y = -1.45;
+      const post = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.15, 2.35, 20), matPost);
+      post.position.y = -0.25;
+      const pivot = new THREE.Mesh(new THREE.SphereGeometry(0.18, 20, 20), matGold);
+      pivot.position.y = 0.92;
+
+      const beamGroup = new THREE.Group();
+      beamGroup.position.y = 0.92;
+      beamGroup.rotation.z = tiltAngle;
+
+      const bar = new THREE.Mesh(new THREE.BoxGeometry(2.7, 0.11, 0.14), matGold);
+      beamGroup.add(bar);
+
+      function makePan(xPos, panMat) {
+        const holder = new THREE.Group();
+        holder.position.set(xPos, 0, 0);
+        holder.rotation.z = -tiltAngle;
+
+        const c1 = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.015, 0.95, 8), matChain);
+        c1.position.set(-0.24, -0.48, 0.18);
+        c1.rotation.z = 0.22;
+
+        const c2 = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.015, 0.95, 8), matChain);
+        c2.position.set(0.24, -0.48, 0.18);
+        c2.rotation.z = -0.22;
+
+        const c3 = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.015, 0.95, 8), matChain);
+        c3.position.set(0, -0.48, -0.22);
+
+        const pan = new THREE.Mesh(new THREE.CylinderGeometry(0.58, 0.42, 0.12, 24), panMat);
+        pan.position.set(0, -0.98, 0);
+
+        holder.add(c1, c2, c3, pan);
+        beamGroup.add(holder);
+      }
+
+      makePan(-1.25, matPanL);
+      makePan(1.25, matPanR);
+
+      parent.add(base, post, pivot, beamGroup);
+    }
+
+    function build3DModel(type) {
       while (rootGroup.children.length > 0) {
         rootGroup.remove(rootGroup.children[0]);
       }
-      spinPartA = null;
-      spinPartB = null;
+      wheelsList = [];
+      fanGroup = null;
+      gearGroup = null;
 
-      const m1 = new THREE.MeshStandardMaterial({ color: c1, roughness: 0.25, metalness: 0.35 });
-      const m2 = new THREE.MeshStandardMaterial({ color: c2, roughness: 0.25, metalness: 0.45 });
-      const mGold = new THREE.MeshStandardMaterial({ color: 0xfacc15, emissive: 0xd97706, emissiveIntensity: 0.25 });
+      if (type === "court") {
+        addBalanceScale(rootGroup, 0.04, 0x10b981, 0x2563eb);
+      } else if (type === "summary") {
+        addBalanceScale(rootGroup, 0.14, 0x10b981, 0x7c3aed);
+      } else if (type === "charger") {
+        // شاحن جداري بسنّي المقبس + كابل + وحدة شحن
+        const plugBody = new THREE.Mesh(
+          new THREE.BoxGeometry(1.15, 1.35, 0.72),
+          new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.35, metalness: 0.15 })
+        );
+        plugBody.position.set(-0.95, 0.15, 0);
 
-      if (type === "charger") {
-        const body = new THREE.Mesh(new THREE.BoxGeometry(1.1, 1.45, 0.75), m1);
-        const p1 = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 0.45, 16), m2);
-        p1.position.set(-0.26, 0.92, 0);
-        const p2 = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 0.45, 16), m2);
-        p2.position.set(0.26, 0.92, 0);
-        spinPartA = new THREE.Mesh(new THREE.TorusGeometry(1.75, 0.06, 16, 72), mGold);
-        spinPartA.rotation.x = Math.PI / 2.5;
-        rootGroup.add(body, p1, p2, spinPartA);
+        const stripe = new THREE.Mesh(
+          new THREE.BoxGeometry(1.17, 0.24, 0.74),
+          new THREE.MeshStandardMaterial({ color: 0x2563eb, roughness: 0.3, metalness: 0.25 })
+        );
+        stripe.position.set(-0.95, 0.35, 0);
+
+        const prongMat = new THREE.MeshStandardMaterial({ color: 0x94a3b8, roughness: 0.25, metalness: 0.85 });
+        const p1 = new THREE.Mesh(new THREE.CylinderGeometry(0.065, 0.065, 0.48, 16), prongMat);
+        p1.position.set(-1.2, 1.05, 0);
+        const p2 = new THREE.Mesh(new THREE.CylinderGeometry(0.065, 0.065, 0.48, 16), prongMat);
+        p2.position.set(-0.7, 1.05, 0);
+
+        const curve = new THREE.CatmullRomCurve3([
+          new THREE.Vector3(-0.95, -0.52, 0),
+          new THREE.Vector3(-0.95, -1.25, 0.25),
+          new THREE.Vector3(0.25, -1.25, 0.25),
+          new THREE.Vector3(1.15, -0.35, 0)
+        ]);
+        const cable = new THREE.Mesh(
+          new THREE.TubeGeometry(curve, 36, 0.065, 12, false),
+          new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.45, metalness: 0.2 })
+        );
+
+        const device = new THREE.Mesh(
+          new THREE.BoxGeometry(0.85, 1.35, 0.14),
+          new THREE.MeshStandardMaterial({ color: 0x10b981, roughness: 0.25, metalness: 0.4 })
+        );
+        device.position.set(1.15, 0.35, 0);
+
+        rootGroup.add(plugBody, stripe, p1, p2, cable, device);
       } else if (type === "bulb") {
-        const glass = new THREE.Mesh(new THREE.SphereGeometry(0.95, 28, 28), mGold);
-        glass.position.y = 0.25;
-        const base = new THREE.Mesh(new THREE.CylinderGeometry(0.45, 0.35, 0.65, 20), m1);
-        base.position.y = -0.85;
-        spinPartA = new THREE.Mesh(new THREE.TorusGeometry(1.65, 0.05, 16, 72), m2);
-        spinPartA.rotation.x = Math.PI / 3;
-        rootGroup.add(glass, base, spinPartA);
+        // مصباح كهربائي بقاعدة مسنّنة وكرة زجاجية وفتيل متوهج
+        const screwMat = new THREE.MeshStandardMaterial({ color: 0x94a3b8, roughness: 0.3, metalness: 0.8 });
+        const base1 = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.36, 0.24, 24), screwMat);
+        base1.position.y = -1.15;
+        const base2 = new THREE.Mesh(new THREE.CylinderGeometry(0.44, 0.44, 0.18, 24), screwMat);
+        base2.position.y = -0.9;
+
+        const glass = new THREE.Mesh(
+          new THREE.SphereGeometry(1.05, 32, 32),
+          new THREE.MeshStandardMaterial({
+            color: 0xfef08a,
+            emissive: 0xf59e0b,
+            emissiveIntensity: 0.35,
+            transparent: true,
+            opacity: 0.78,
+            roughness: 0.15
+          })
+        );
+        glass.position.y = 0.22;
+
+        const filament = new THREE.Mesh(
+          new THREE.TorusGeometry(0.26, 0.035, 12, 28),
+          new THREE.MeshStandardMaterial({ color: 0xef4444, emissive: 0xf97316, emissiveIntensity: 0.9 })
+        );
+        filament.position.y = 0.15;
+
+        rootGroup.add(base1, base2, glass, filament);
       } else if (type === "cooler") {
-        const frame = new THREE.Mesh(new THREE.TorusGeometry(1.25, 0.14, 16, 48), m1);
-        spinPartA = new THREE.Mesh(new THREE.BoxGeometry(1.9, 0.28, 0.08), m2);
-        spinPartB = new THREE.Mesh(new THREE.BoxGeometry(1.9, 0.28, 0.08), mGold);
-        spinPartB.rotation.z = Math.PI / 2;
-        rootGroup.add(frame, spinPartA, spinPartB);
+        // وحدة تبريد بشفرات مروحة دوارة
+        const housing = new THREE.Mesh(
+          new THREE.BoxGeometry(2.3, 1.35, 0.95),
+          new THREE.MeshStandardMaterial({ color: 0xe2e8f0, roughness: 0.35, metalness: 0.2 })
+        );
+        housing.position.z = -0.25;
+
+        const shroud = new THREE.Mesh(
+          new THREE.TorusGeometry(0.82, 0.09, 16, 40),
+          new THREE.MeshStandardMaterial({ color: 0x0284c7, roughness: 0.3, metalness: 0.45 })
+        );
+        shroud.position.z = 0.28;
+
+        fanGroup = new THREE.Group();
+        fanGroup.position.z = 0.28;
+        const hub = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.22, 0.22, 0.14, 20),
+          new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.3, metalness: 0.6 })
+        );
+        hub.rotation.x = Math.PI / 2;
+        fanGroup.add(hub);
+
+        const bladeMat = new THREE.MeshStandardMaterial({ color: 0x38bdf8, roughness: 0.25, metalness: 0.35 });
+        for (let i = 0; i < 6; i++) {
+          const b = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.56, 0.04), bladeMat);
+          const ang = (i * Math.PI) / 3;
+          b.position.set(Math.cos(ang) * 0.38, Math.sin(ang) * 0.38, 0);
+          b.rotation.z = ang + 0.35;
+          fanGroup.add(b);
+        }
+
+        rootGroup.add(housing, shroud, fanGroup);
       } else if (type === "mobility") {
-        const chassis = new THREE.Mesh(new THREE.BoxGeometry(1.85, 0.65, 0.9), m1);
-        const cabin = new THREE.Mesh(new THREE.BoxGeometry(1.05, 0.52, 0.8), m2);
-        cabin.position.set(-0.1, 0.52, 0);
-        spinPartA = new THREE.Mesh(new THREE.CylinderGeometry(0.35, 0.35, 0.22, 20), mGold);
-        spinPartA.rotation.x = Math.PI / 2;
-        spinPartA.position.set(-0.55, -0.35, 0.48);
-        spinPartB = spinPartA.clone();
-        spinPartB.position.set(0.55, -0.35, 0.48);
-        rootGroup.add(chassis, cabin, spinPartA, spinPartB);
+        // مركبة بأربع عجلات ومصابيح
+        const bodyMat = new THREE.MeshStandardMaterial({ color: 0x2563eb, roughness: 0.28, metalness: 0.45 });
+        const cabinMat = new THREE.MeshStandardMaterial({ color: 0xbae6fd, roughness: 0.2, metalness: 0.25 });
+        const tireMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.65, metalness: 0.2 });
+
+        const lower = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.55, 1.15), bodyMat);
+        lower.position.y = -0.15;
+
+        const cabin = new THREE.Mesh(new THREE.BoxGeometry(1.35, 0.58, 1.02), cabinMat);
+        cabin.position.set(-0.15, 0.38, 0);
+
+        const lampMat = new THREE.MeshStandardMaterial({ color: 0xfef08a, emissive: 0xfacc15, emissiveIntensity: 0.7 });
+        const lamp1 = new THREE.Mesh(new THREE.SphereGeometry(0.11, 14, 14), lampMat);
+        lamp1.position.set(1.22, -0.1, 0.35);
+        const lamp2 = lamp1.clone();
+        lamp2.position.set(1.22, -0.1, -0.35);
+
+        const wheelCoords = [
+          [-0.78, -0.45, 0.62],
+          [0.78, -0.45, 0.62],
+          [-0.78, -0.45, -0.62],
+          [0.78, -0.45, -0.62]
+        ];
+        wheelCoords.forEach(([wx, wy, wz]) => {
+          const w = new THREE.Mesh(new THREE.CylinderGeometry(0.36, 0.36, 0.22, 24), tireMat);
+          w.rotation.x = Math.PI / 2;
+          w.position.set(wx, wy, wz);
+          wheelsList.push(w);
+          rootGroup.add(w);
+        });
+
+        rootGroup.add(lower, cabin, lamp1, lamp2);
       } else if (type === "maintenance") {
-        const hub = new THREE.Mesh(new THREE.OctahedronGeometry(0.62, 0), mGold);
-        spinPartA = new THREE.Mesh(new THREE.TorusGeometry(1.2, 0.16, 16, 48), m1);
-        spinPartB = new THREE.Mesh(new THREE.BoxGeometry(2.3, 0.18, 0.18), m2);
-        rootGroup.add(hub, spinPartA, spinPartB);
-      } else {
-        const poly = new THREE.Mesh(new THREE.IcosahedronGeometry(1.05, 1), m1);
-        spinPartA = new THREE.Mesh(new THREE.TorusGeometry(1.65, 0.055, 16, 72), mGold);
-        spinPartB = new THREE.Mesh(new THREE.TorusGeometry(1.95, 0.045, 16, 72), m2);
-        spinPartB.rotation.y = Math.PI / 3;
-        rootGroup.add(poly, spinPartA, spinPartB);
+        // ترس ميكانيكي مسنّن حقيقي
+        gearGroup = new THREE.Group();
+        const gearMat = new THREE.MeshStandardMaterial({ color: 0x10b981, roughness: 0.28, metalness: 0.6 });
+        const rim = new THREE.Mesh(new THREE.TorusGeometry(1.05, 0.22, 16, 48), gearMat);
+        rim.rotation.x = Math.PI / 2;
+        gearGroup.add(rim);
+
+        for (let i = 0; i < 12; i++) {
+          const tooth = new THREE.Mesh(new THREE.BoxGeometry(0.24, 0.24, 0.28), gearMat);
+          const ang = (i * Math.PI * 2) / 12;
+          tooth.position.set(Math.cos(ang) * 1.32, 0, Math.sin(ang) * 1.32);
+          tooth.rotation.y = -ang;
+          gearGroup.add(tooth);
+        }
+
+        const centerHub = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.32, 0.32, 0.45, 24),
+          new THREE.MeshStandardMaterial({ color: 0xf59e0b, roughness: 0.25, metalness: 0.65 })
+        );
+        gearGroup.add(centerHub);
+        gearGroup.rotation.x = Math.PI / 3;
+        rootGroup.add(gearGroup);
       }
     }
 
@@ -1068,11 +1232,11 @@
     function init3D() {
       const box = document.getElementById("stage3d");
       const w = box.clientWidth || 520;
-      const h = box.clientHeight || 340;
+      const h = box.clientHeight || 350;
 
       scene = new THREE.Scene();
-      camera = new THREE.PerspectiveCamera(46, w / h, 0.1, 100);
-      camera.position.set(0, 0.3, zoomDist);
+      camera = new THREE.PerspectiveCamera(45, w / h, 0.1, 100);
+      camera.position.set(0, 0.25, zoomDist);
 
       renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
       renderer.setSize(w, h);
@@ -1083,7 +1247,7 @@
       box.insertBefore(renderer.domElement, box.firstChild);
 
       scene.add(new THREE.AmbientLight(0xffffff, 0.95));
-      const d1 = new THREE.DirectionalLight(0xffffff, 1.1);
+      const d1 = new THREE.DirectionalLight(0xffffff, 1.15);
       d1.position.set(4, 6, 5);
       scene.add(d1);
       const d2 = new THREE.DirectionalLight(0x38bdf8, 0.65);
@@ -1093,13 +1257,13 @@
       rootGroup = new THREE.Group();
       scene.add(rootGroup);
 
-      build3DModel(SECTIONS[0].modelType, 0x2563eb, 0x10b981);
+      build3DModel(SECTIONS[0].modelType);
       bindHandControls(box);
 
       window.addEventListener("resize", () => {
         if (!renderer || !camera) return;
         const nw = box.clientWidth || 520;
-        const nh = box.clientHeight || 340;
+        const nh = box.clientHeight || 350;
         camera.aspect = nw / nh;
         camera.updateProjectionMatrix();
         renderer.setSize(nw, nh);
@@ -1118,23 +1282,20 @@
         rootGroup.rotation.x += velX;
         velY *= 0.92;
         velX *= 0.92;
-        if (autoSpin) rootGroup.rotation.y += 0.007;
+        if (autoSpin) rootGroup.rotation.y += 0.006;
       }
 
-      if (sec.modelType === "cooler") {
-        if (spinPartA) spinPartA.rotation.z = t * 4.2;
-        if (spinPartB) spinPartB.rotation.z = t * 4.2 + Math.PI / 2;
-      } else if (sec.modelType === "mobility") {
-        if (spinPartA) spinPartA.rotation.y = t * 3.2;
-        if (spinPartB) spinPartB.rotation.y = t * 3.2;
-      } else if (spinPartA) {
-        spinPartA.rotation.z = -t * 0.7;
+      if (sec.modelType === "cooler" && fanGroup) {
+        fanGroup.rotation.z = t * 5.0;
+      } else if (sec.modelType === "mobility" && wheelsList.length) {
+        wheelsList.forEach((w) => { w.rotation.y = t * 3.5; });
+      } else if (sec.modelType === "maintenance" && gearGroup) {
+        gearGroup.rotation.y = t * 0.9;
       }
 
       renderer.render(scene, camera);
     }
 
-    // تشغيل صوت كل قسم من ملفه الخاص فقط (بدون تكرار صوت غيره)
     function stopVoice() {
       audioEl.pause();
       audioEl.currentTime = 0;
@@ -1297,18 +1458,8 @@
       document.getElementById("nextPageBtn").textContent =
         idx === SECTIONS.length - 1 ? "العودة للمقدمة ↺" : "التالي ←";
 
-      const colors = [
-        [0x2563eb, 0x10b981],
-        [0x1d4ed8, 0x06b6d4],
-        [0x059669, 0x8b5cf6],
-        [0x7c3aed, 0x06b6d4],
-        [0xd97706, 0x10b981],
-        [0xe11d48, 0x2563eb],
-        [0x7c3aed, 0x10b981]
-      ];
-      const [c1, c2] = colors[idx] || [0x2563eb, 0x10b981];
-      build3DModel(s.modelType, c1, c2);
-      rootGroup.rotation.set(0.18, 0.35, 0);
+      build3DModel(s.modelType);
+      rootGroup.rotation.set(0.16, 0.38, 0);
     }
 
     function goToPage(newIdx) {
@@ -1342,9 +1493,9 @@
     };
 
     document.getElementById("resetViewBtn").onclick = () => {
-      zoomDist = 5.4;
+      zoomDist = 5.6;
       camera.position.z = zoomDist;
-      rootGroup.rotation.set(0.18, 0.35, 0);
+      rootGroup.rotation.set(0.16, 0.38, 0);
       velX = 0;
       velY = 0;
     };
